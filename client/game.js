@@ -10,8 +10,7 @@ var timestep = 1000 / 60;
 /*************************/
 
 var ctx = null;
-
-var tempTest = 150;
+var player = null;
 
 $(document).ready(function(){
 
@@ -20,19 +19,19 @@ $(document).ready(function(){
     canvas.height = canvasHeight;
     ctx = canvas.getContext('2d');
 
+    player = new Player(150,250,50,50,0.05);
+    
     requestAnimationFrame(mainLoop);
 });
 
 function update(delta) {
-    tempTest += 0.05 * delta;
+    player.update(delta);
 }
 
 function draw(){
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     drawMap();
-
-    ctx.fillStyle="#000000";
-    ctx.fillRect(tempTest,150,tileSize,tileSize);
+    player.draw();
 }
 
 function drawMap(){
