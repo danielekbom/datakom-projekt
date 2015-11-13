@@ -19,7 +19,7 @@ $(document).ready(function(){
     canvas.height = canvasHeight;
     ctx = canvas.getContext('2d');
 
-    player = new Player(150,250,50,50,0.05);
+    player = new Player(150,250,50,50,0.1);
     
     requestAnimationFrame(mainLoop);
 });
@@ -68,4 +68,39 @@ function mainLoop(timestamp) {
     draw();
     requestAnimationFrame(mainLoop);
 }
+
+document.onkeydown = function(event){
+    switch(event.keyCode){
+        case 37:
+            player.moveLeft = true;
+            break;
+        case 38:
+            player.moveUp = true;
+            break;
+        case 39:
+            player.moveRight = true;
+            break;
+        case 40:
+            player.moveDown = true;
+            break;
+    }
+};
+
+document.onkeyup = function(event){
+    switch(event.keyCode){
+        case 37:
+            player.moveLeft = false;
+            break;
+        case 38:
+            player.moveUp = false;
+            break;
+        case 39:
+            player.moveRight = false;
+            break;
+        case 40:
+            player.moveDown = false;
+            break;
+    }
+};
+
     

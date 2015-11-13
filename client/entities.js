@@ -8,8 +8,16 @@ Player = function(x,y,width,height,velocity){
         velocity:velocity
     };
     
+    self.moveLeft = false;
+    self.moveUp = false;
+    self.moveRight = false;
+    self.moveDown = false;
+    
     self.update = function(delta){
-        self.x += self.velocity * delta;
+        if(self.moveLeft) self.x -= self.velocity * delta;
+        if(self.moveUp) self.y -= self.velocity * delta;
+        if(self.moveRight) self.x += self.velocity * delta;
+        if(self.moveDown) self.y += self.velocity * delta;
     };
     
     self.draw = function(){
