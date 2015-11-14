@@ -17,6 +17,8 @@ Img.ground1 = new Image();
 Img.ground1.src = "client/images/ground_tiles.png";
 Img.ground2 = new Image();
 Img.ground2.src = "client/images/graphics-tiles-waterflow.png";
+Img.player = new Image();
+Img.player.src = "client/images/player.png";
 
 $(document).ready(function(){
 
