@@ -68,21 +68,6 @@ function drawMap(){
         tileX = 0;
         tileY += tileSize;
     }
-    
-    /*$.each(map, function(key, value){
-        $.each(map[key], function(innerKey, innerValue){
-            if(innerValue == 0) ctx.drawImage(Img.ground1,32,64,64,64,tileX,tileY,tileSize,tileSize);
-            if(innerValue == 1) ctx.drawImage(Img.ground2,0,0,64,64,tileX,tileY,tileSize,tileSize);
-            if(innerValue == 3) ctx.drawImage(Img.ground1,32,160,64,64,tileX,tileY,tileSize,tileSize);
-            if(innerValue == 1000){
-                ctx.drawImage(Img.ground1,32,64,64,64,tileX,tileY,tileSize,tileSize);
-                ctx.drawImage(Img.objects1,160,70,64,64,tileX,tileY,tileSize,tileSize);
-            }
-            tileX += tileSize
-        });
-        tileX = 0;
-        tileY += tileSize;
-    });*/
 }
 
 function mainLoop(timestamp) {
