@@ -12,6 +12,12 @@ var timestep = 1000 / 60;
 var ctx = null;
 var player = null;
 
+var Img = {};
+Img.ground1 = new Image();
+Img.ground1.src = "client/images/ground_tiles.png";
+Img.ground2 = new Image();
+Img.ground2.src = "client/images/graphics-tiles-waterflow.png";
+
 $(document).ready(function(){
 
     var canvas = $('#game-canvas').get(0);
@@ -39,12 +45,12 @@ function drawMap(){
 
     var tileX = 0;
     var tileY = 0;
+    
     $.each(map, function(key, value){
         $.each(map[key], function(innerKey, innerValue){
-            if(innerValue == 0) ctx.fillStyle="#33cc33";
-            if(innerValue == 1) ctx.fillStyle="#66ccff";
-            if(innerValue == 3) ctx.fillStyle="#663300";
-            ctx.fillRect(tileX, tileY, tileSize, tileSize);
+            if(innerValue == 0) ctx.drawImage(Img.ground1,32,64,64,64,tileX,tileY,tileSize,tileSize);
+            if(innerValue == 1) ctx.drawImage(Img.ground2,0,0,64,64,tileX,tileY,tileSize,tileSize);
+            if(innerValue == 3) ctx.drawImage(Img.ground1,32,160,64,64,tileX,tileY,tileSize,tileSize);
             tileX += tileSize
         });
         tileX = 0;
