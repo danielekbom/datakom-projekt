@@ -29,7 +29,7 @@ $(document).ready(function(){
     canvas.height = canvasHeight;
     ctx = canvas.getContext('2d');
 
-    player = new Player(150,250,50,50,0.1);
+    player = new Player(canvasWidth,canvasHeight,50,50,0.1);
     
     requestAnimationFrame(mainLoop);
 });
@@ -50,7 +50,26 @@ function drawMap(){
     var tileX = 0;
     var tileY = 0;
     
-    $.each(map, function(key, value){
+    var restY = player.y % tileSize;
+    tileY -= restY;
+    for(y = Math.floor(player.y / tileSize - 11); y < Math.floor(player.y / tileSize + 11); y++){
+        var restX = player.x % tileSize;
+        tileX -= restX;
+        for(x = Math.floor(player.x / tileSize - 16); x < Math.floor(player.x / tileSize + 16); x++){
+            if(map[y][x] == 0) ctx.drawImage(Img.ground1,32,64,64,64,tileX,tileY,tileSize,tileSize);
+            if(map[y][x] == 1) ctx.drawImage(Img.ground2,0,0,64,64,tileX,tileY,tileSize,tileSize);
+            if(map[y][x] == 3) ctx.drawImage(Img.ground1,32,160,64,64,tileX,tileY,tileSize,tileSize);
+            if(map[y][x] == 1000){
+                ctx.drawImage(Img.ground1,32,64,64,64,tileX,tileY,tileSize,tileSize);
+                ctx.drawImage(Img.objects1,160,70,64,64,tileX,tileY,tileSize,tileSize);
+            }
+            tileX += tileSize;
+        }
+        tileX = 0;
+        tileY += tileSize;
+    }
+    
+    /*$.each(map, function(key, value){
         $.each(map[key], function(innerKey, innerValue){
             if(innerValue == 0) ctx.drawImage(Img.ground1,32,64,64,64,tileX,tileY,tileSize,tileSize);
             if(innerValue == 1) ctx.drawImage(Img.ground2,0,0,64,64,tileX,tileY,tileSize,tileSize);
@@ -63,7 +82,7 @@ function drawMap(){
         });
         tileX = 0;
         tileY += tileSize;
-    });
+    });*/
 }
 
 function mainLoop(timestamp) {
@@ -86,15 +105,19 @@ function mainLoop(timestamp) {
 document.onkeydown = function(event){
     switch(event.keyCode){
         case 37:
+            event.preventDefault();
             player.moveLeft = true;
             break;
         case 38:
+            event.preventDefault();
             player.moveUp = true;
             break;
         case 39:
+            event.preventDefault();
             player.moveRight = true;
             break;
         case 40:
+            event.preventDefault();
             player.moveDown = true;
             break;
     }

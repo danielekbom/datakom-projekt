@@ -39,7 +39,7 @@ Player = function(x,y,width,height,velocity){
             currentSprite = 1;
             self.animationCounter = 0;
         }
-        ctx.drawImage(Img.player,48*currentSprite,52*self.direction,52,52,self.x,self.y,self.width,self.height);
+        ctx.drawImage(Img.player,48*currentSprite,52*self.direction,52,52,ctx.canvas.width/2,ctx.canvas.height/2,self.width,self.height);
     };
     
     return self;
