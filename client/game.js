@@ -60,7 +60,7 @@ function drawMap(){
         for(x = Math.floor(player.x / tileSize - 16); x < Math.floor(player.x / tileSize + 16); x++){
             if(map[y][x] == 0) ctx.drawImage(Img.ground1,32,64,64,64,tileX,tileY,tileSize,tileSize);
             if(map[y][x] == 1) ctx.drawImage(Img.ground2,0,0,64,64,tileX,tileY,tileSize,tileSize);
-            if(map[y][x] == 3) ctx.drawImage(Img.ground1,32,160,64,64,tileX,tileY,tileSize,tileSize);
+            if(map[y][x] == 3) ctx.drawImage(Img.ground1,32,160,96,96,tileX,tileY,tileSize,tileSize);
             if(map[y][x] == 4) ctx.drawImage(Img.ground1,256,160,32,32,tileX,tileY,tileSize,tileSize);
             if(map[y][x] == 5) ctx.drawImage(Img.ground1,288,160,32,32,tileX,tileY,tileSize,tileSize);
             if(map[y][x] == 6) ctx.drawImage(Img.ground1,224,192,32,32,tileX,tileY,tileSize,tileSize);
