@@ -17,6 +17,8 @@ Img.ground1 = new Image();
 Img.ground1.src = "client/images/ground_tiles.png";
 Img.ground2 = new Image();
 Img.ground2.src = "client/images/graphics-tiles-waterflow.png";
+Img.ground3 = new Image();
+Img.ground3.src = "client/images/beach_sand_woa.png";
 Img.objects1 = new Image();
 Img.objects1.src = "client/images/object-layer.png";
 Img.player = new Image();
@@ -59,6 +61,9 @@ function drawMap(){
             if(map[y][x] == 0) ctx.drawImage(Img.ground1,32,64,64,64,tileX,tileY,tileSize,tileSize);
             if(map[y][x] == 1) ctx.drawImage(Img.ground2,0,0,64,64,tileX,tileY,tileSize,tileSize);
             if(map[y][x] == 3) ctx.drawImage(Img.ground1,32,160,64,64,tileX,tileY,tileSize,tileSize);
+            if(map[y][x] == 4) ctx.drawImage(Img.ground1,256,160,32,32,tileX,tileY,tileSize,tileSize);
+            if(map[y][x] == 5) ctx.drawImage(Img.ground1,288,160,32,32,tileX,tileY,tileSize,tileSize);
+            if(map[y][x] == 6) ctx.drawImage(Img.ground1,224,192,32,32,tileX,tileY,tileSize,tileSize);
             if(map[y][x] == 1000){
                 ctx.drawImage(Img.ground1,32,64,64,64,tileX,tileY,tileSize,tileSize);
                 ctx.drawImage(Img.objects1,160,70,64,64,tileX,tileY,tileSize,tileSize);
