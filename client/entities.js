@@ -39,7 +39,20 @@ Player = function(x,y,width,height,velocity){
             currentSprite = 1;
             self.animationCounter = 0;
         }
+        
+        if(self.direction == 1){
+            ctx.drawImage(Img.swords,0,0,32,32,ctx.canvas.width/2+tileSize-10,ctx.canvas.height/2+5,tileSize,tileSize);
+        }else if(self.direction == 3){
+            ctx.drawImage(Img.swords,0,32,32,32,ctx.canvas.width/2-tileSize+25,ctx.canvas.height/2+8,tileSize,tileSize);
+        }else if(self.direction == 0){
+            ctx.drawImage(Img.swords,0,64,32,32,ctx.canvas.width/2+tileSize-12,ctx.canvas.height/2+4,tileSize,tileSize);
+        }
+        
         ctx.drawImage(Img.player,48*currentSprite,52*self.direction,52,52,ctx.canvas.width/2,ctx.canvas.height/2,self.width,self.height);
+        
+        if(self.direction == 2){
+            ctx.drawImage(Img.swords,0,64,32,32,ctx.canvas.width/2-tileSize+28,ctx.canvas.height/2+10,tileSize,tileSize);
+        }
     };
     
     return self;

@@ -23,6 +23,8 @@ Img.objects1 = new Image();
 Img.objects1.src = "client/images/object-layer.png";
 Img.player = new Image();
 Img.player.src = "client/images/player.png";
+Img.swords = new Image();
+Img.swords.src = "client/images/swords.png";
 
 $(document).ready(function(){
 
