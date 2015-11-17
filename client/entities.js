@@ -28,7 +28,7 @@ Player = function(x,y,width,height,velocity){
         
         if(self.attacking == true){
             if(self.animationCounterWeapon > 0 && self.animationCounterWeapon < 3.8){
-                self.animationCounterWeapon += 0.2;
+                self.animationCounterWeapon += 0.3;
             }else{
                 self.animationCounterWeapon = 0;
                 self.attacking = false;
@@ -77,7 +77,7 @@ Player = function(x,y,width,height,velocity){
     
     self.attack = function(){
         self.attacking = true;
-        self.animationCounterWeapon += 0.2;
+        self.animationCounterWeapon += 0.3;
     };
     
     return self;
