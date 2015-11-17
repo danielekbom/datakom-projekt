@@ -112,6 +112,10 @@ document.onkeydown = function(event){
             event.preventDefault();
             player.moveDown = true;
             break;
+        case 32:
+            event.preventDefault();
+            player.SpaceButton();
+            break;
     }
 };
 
@@ -131,5 +135,11 @@ document.onkeyup = function(event){
             break;
     }
 };
+
+document.onmousedown = function(mouse){
+	if(mouse.which === 1){
+		player.LeftMouse(mouse);
+    }
+}
 
     
