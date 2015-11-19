@@ -31,7 +31,7 @@ Img.swords.src = "client/images/swords.png";
 
 $(document).ready(function(){
 
-    socket = io.connect('http://127.0.0.1:8080');
+    socket = io.connect('http://127.0.0.1:9000');
     
     var canvas = $('#game-canvas').get(0);
     canvas.width = canvasWidth;

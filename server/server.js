@@ -8,7 +8,7 @@ var httpServer = http.createServer(function(request,response){
 });
 
 httpServer.listen(9000,function(){
- console.log('Server has started listening on port 9000');
+ console.log('Server has started listening on port 8080');
 });
 
 ioServer = io.listen(httpServer, { log: false });
