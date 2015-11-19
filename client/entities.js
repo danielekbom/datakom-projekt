@@ -1,6 +1,7 @@
-Player = function(x,y,width,height,velocity){
+Player = function(name,x,y,width,height,velocity){
     
     var self = {
+        name:name,
         x:x,
         y:y,
         width:width,

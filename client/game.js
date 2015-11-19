@@ -11,6 +11,9 @@ var timestep = 1000 / 60;
 
 var ctx = null;
 var player = null;
+var socket = null;
+
+var players = {};
 
 var Img = {};
 Img.ground1 = new Image();
@@ -28,12 +31,16 @@ Img.swords.src = "client/images/swords.png";
 
 $(document).ready(function(){
 
+    socket = io.connect('http://127.0.0.1:8080');
+    
     var canvas = $('#game-canvas').get(0);
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
     ctx = canvas.getContext('2d');
 
-    player = new Player(canvasWidth,canvasHeight,50,50,0.1);
+    player = new Player("Daniel",canvasWidth,canvasHeight,50,50,0.1); 
+    players[player.name] = player;
+    emitConnected();
     
     requestAnimationFrame(mainLoop);
 });
@@ -142,4 +149,7 @@ document.onmousedown = function(mouse){
     }
 }
 
+function emitConnected(){
+    socket.emit('player_connect', { 'name' : player.name , 'x' : player.x, 'y' : player.y });
+}
     
