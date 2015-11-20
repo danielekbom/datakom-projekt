@@ -8,7 +8,7 @@ var httpServer = http.createServer(function(request,response){
 });
 
 httpServer.listen(9000,function(){
- console.log('Server has started listening on port 8080');
+ console.log('Server has started listening on port 9000');
 });
 
 ioServer = io.listen(httpServer, { log: false });
@@ -18,6 +18,7 @@ var players = {};
 ioServer.sockets.on('connection', function(socket){
 	
 	socket.on('player_connect', function(data){
+        socket.emit('init_players', players);
 		players[data.name] = new Player(socket.id, data.name, data.x, data.y);
 		socket.broadcast.emit('player_connect', {'name' : data.name, 'x' : data.x, 'y' : data.y});
 		console.log('Client connected: ' + data.name);
@@ -38,9 +39,8 @@ ioServer.sockets.on('connection', function(socket){
 		players[data.name].y = data.y;
 	});
 
-	//Game Loop
 	setInterval(function(){
-		socket.emit('players_position', players);
+		socket.broadcast.emit('players_positions', players);
 	}, 60);
 
 });

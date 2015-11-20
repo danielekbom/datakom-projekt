@@ -30,15 +30,14 @@ Img.swords = new Image();
 Img.swords.src = "client/images/swords.png";
 
 $(document).ready(function(){
-
-    socket = io.connect('http://127.0.0.1:9000');
     
     var canvas = $('#game-canvas').get(0);
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
     ctx = canvas.getContext('2d');
 
-    player = new Player("Daniel",canvasWidth,canvasHeight,50,50,0.1); 
+    var randomName = Math.floor((Math.random() * 10) + 1);
+    player = new Player(randomName,canvasWidth,canvasHeight,50,50,0.1); 
     players[player.name] = player;
     emitConnected();
     
@@ -47,12 +46,16 @@ $(document).ready(function(){
 
 function update(delta) {
     player.update(delta);
+    if(player.moveLeft || player.moveUp || player.moveRight || player.moveDown){
+        emitMoved();
+    }
 }
 
 function draw(){
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     drawMap();
     player.draw();
+    drawPlayers();
 }
 
 function drawMap(){
@@ -149,7 +152,42 @@ document.onmousedown = function(mouse){
     }
 }
 
+function drawPlayers(){
+    for (var key in players) {
+        ctx.drawImage(Img.player,48,52,52,52,Math.floor(players[key].x/32),Math.floor(players[key].y/32),52,52);
+    }
+}
+
 function emitConnected(){
     socket.emit('player_connect', { 'name' : player.name , 'x' : player.x, 'y' : player.y });
 }
+
+function emitMoved(){
+    socket.emit('player_move', { 'name' : player.name , 'x' : player.x , 'y' : player.y });
+}
+
+socket = io.connect('http://127.0.0.1:9000');
+
+socket.on('init_players', function (data){
+    for (var key in data) {
+        players[key] = data[key];
+    }
+});
+
+socket.on('player_connect', function (data){
+    players[data.name] = new Player(data.name,data.x,data.y,50,50,0.1);
+});
+
+socket.on('player_disconnect', function (data){
+    delete players[data.name];
+});
+
+socket.on('players_positions', function (data){
+    for (var key in data) {
+        if(players[key] != undefined) {
+            players[key].x = data[key].x;
+            players[key].y = data[key].y;
+        }
+    }
+});
     
