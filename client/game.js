@@ -38,7 +38,6 @@ $(document).ready(function(){
 
     var randomName = Math.floor((Math.random() * 10) + 1);
     player = new Player(randomName,900,900,50,50,0.1); 
-    players[player.name] = player;
     emitConnected();
     
     requestAnimationFrame(mainLoop);
@@ -154,11 +153,10 @@ document.onmousedown = function(mouse){
 
 function drawPlayers(){
     for (var key in players) {
-        if(players[key].name == player.name){ continue; }
         var xDelta = players[key].x - player.x;
         var yDelta = players[key].y - player.y;
         if(Math.abs(xDelta) < tileSize * 16 && Math.abs(yDelta) < tileSize * 11){
-            ctx.drawImage(Img.player,48,52,52,52,canvasWidth/2+xDelta,canvasHeight/2+yDelta,52,52);
+            ctx.drawImage(Img.player,48,52,52,52,canvasWidth/2+xDelta,canvasHeight/2+yDelta,50,50);
         }
     }
 }
@@ -175,6 +173,7 @@ socket = io.connect('http://127.0.0.1:9000');
 
 socket.on('init_players', function (data){
     for (var key in data) {
+        if(data[key].name == player.name){ continue; }
         players[key] = data[key];
     }
 });

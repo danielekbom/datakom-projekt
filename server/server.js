@@ -41,7 +41,7 @@ ioServer.sockets.on('connection', function(socket){
 
 	setInterval(function(){
 		socket.broadcast.emit('players_positions', players);
-	}, 300);
+	}, 60);
 
 });
 
