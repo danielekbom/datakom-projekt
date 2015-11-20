@@ -154,8 +154,9 @@ document.onmousedown = function(mouse){
 
 function drawPlayers(){
     for (var key in players) {
-        var xDelta = player.x - players[key].x;
-        var yDelta = player.y - players[key].y;
+        if(players[key].name == player.name){ continue; }
+        var xDelta = players[key].x - player.x;
+        var yDelta = players[key].y - player.y;
         if(Math.abs(xDelta) < tileSize * 16 && Math.abs(yDelta) < tileSize * 11){
             ctx.drawImage(Img.player,48,52,52,52,canvasWidth/2+xDelta,canvasHeight/2+yDelta,52,52);
         }
