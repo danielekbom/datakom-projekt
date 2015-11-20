@@ -37,7 +37,7 @@ $(document).ready(function(){
     ctx = canvas.getContext('2d');
 
     var randomName = Math.floor((Math.random() * 10) + 1);
-    player = new Player(randomName,canvasWidth,canvasHeight,50,50,0.1); 
+    player = new Player(randomName,900,900,50,50,0.1); 
     players[player.name] = player;
     emitConnected();
     
@@ -154,7 +154,11 @@ document.onmousedown = function(mouse){
 
 function drawPlayers(){
     for (var key in players) {
-        ctx.drawImage(Img.player,48,52,52,52,Math.floor(players[key].x/32),Math.floor(players[key].y/32),52,52);
+        var xDelta = player.x - players[key].x;
+        var yDelta = player.y - players[key].y;
+        if(Math.abs(xDelta) < tileSize * 16 && Math.abs(yDelta) < tileSize * 11){
+            ctx.drawImage(Img.player,48,52,52,52,canvasWidth/2+xDelta,canvasHeight/2+yDelta,52,52);
+        }
     }
 }
 
