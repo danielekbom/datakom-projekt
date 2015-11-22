@@ -63,6 +63,7 @@ Player = function(name,x,y,width,height,velocity){
             ctx.drawImage(Img.swords,32*Math.floor(self.animationCounterWeapon),64,32,32,ctx.canvas.width/2+tileSize-12,ctx.canvas.height/2+4,tileSize,tileSize);
         }
         
+        ctx.fillText(self.name,ctx.canvas.width/2+22, ctx.canvas.height/2-8);
         ctx.drawImage(Img.player,48*currentSprite,52*self.direction,52,52,ctx.canvas.width/2,ctx.canvas.height/2,self.width,self.height);
         
         if(self.direction == 2){

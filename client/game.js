@@ -35,9 +35,11 @@ $(document).ready(function(){
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
     ctx = canvas.getContext('2d');
+    ctx.textAlign="center";
+    ctx.font='bold 12px Arial';
 
     var randomName = Math.floor((Math.random() * 1000) + 1);
-    player = new Player(randomName,900,900,50,50,0.1); 
+    player = new Player("Player " + randomName,900,900,50,50,0.1); 
     emitConnected();
     
     requestAnimationFrame(mainLoop);
@@ -167,6 +169,7 @@ function drawPlayers(){
                 ctx.drawImage(Img.swords,32*Math.floor(players[key].animationCounterWeapon),64,32,32,canvasWidth/2+xDelta+tileSize-12,canvasHeight/2+yDelta+4,tileSize,tileSize);
             }
             
+            ctx.fillText(players[key].name,canvasWidth/2+xDelta+22, canvasHeight/2+yDelta-8);
             ctx.drawImage(Img.player,48*currentSprite,52*players[key].direction,52,52,canvasWidth/2+xDelta,canvasHeight/2+yDelta,50,50);
             
             if(players[key].direction == 2){
