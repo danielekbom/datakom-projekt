@@ -4,9 +4,9 @@ var canvasWidth = tileSize*30;
 var canvasHeight = tileSize*20;
 
 var lastFrameTimeMs = 0;
-var maxFPS = 60;
+var maxFPS = 50;
 var delta = 0;
-var timestep = 1000 / 60;
+var timestep = 1000 / 50;
 /*************************/
 
 var ctx = null;
@@ -36,7 +36,7 @@ $(document).ready(function(){
     canvas.height = canvasHeight;
     ctx = canvas.getContext('2d');
 
-    var randomName = Math.floor((Math.random() * 10) + 1);
+    var randomName = Math.floor((Math.random() * 1000) + 1);
     player = new Player(randomName,900,900,50,50,0.1); 
     emitConnected();
     
@@ -152,11 +152,26 @@ document.onmousedown = function(mouse){
 }
 
 function drawPlayers(){
+    var currentSprite = 0;
     for (var key in players) {
         var xDelta = players[key].x - player.x;
         var yDelta = players[key].y - player.y;
         if(Math.abs(xDelta) < tileSize * 16 && Math.abs(yDelta) < tileSize * 11){
-            ctx.drawImage(Img.player,48,52,52,52,canvasWidth/2+xDelta,canvasHeight/2+yDelta,50,50);
+            currentSprite = Math.floor(players[key].animationCounter) % 3;
+            
+            if(players[key].direction == 1){
+                ctx.drawImage(Img.swords,32*Math.floor(players[key].animationCounterWeapon),0,32,32,canvasWidth/2+xDelta+tileSize-10,canvasHeight/2+yDelta+5,tileSize,tileSize);
+            }else if(players[key].direction == 3){
+                ctx.drawImage(Img.swords,32*Math.floor(players[key].animationCounterWeapon),32,32,32,canvasWidth/2+xDelta-tileSize+25,canvasHeight/2+yDelta+8,tileSize,tileSize);
+            }else if(players[key].direction == 0){
+                ctx.drawImage(Img.swords,32*Math.floor(players[key].animationCounterWeapon),64,32,32,canvasWidth/2+xDelta+tileSize-12,canvasHeight/2+yDelta+4,tileSize,tileSize);
+            }
+            
+            ctx.drawImage(Img.player,48*currentSprite,52*players[key].direction,52,52,canvasWidth/2+xDelta,canvasHeight/2+yDelta,50,50);
+            
+            if(players[key].direction == 2){
+                ctx.drawImage(Img.swords,32*Math.floor(players[key].animationCounterWeapon),64,32,32,canvasWidth/2+xDelta-tileSize+28,canvasHeight/2+yDelta+10,tileSize,tileSize);
+            }
         }
     }
 }
@@ -166,7 +181,7 @@ function emitConnected(){
 }
 
 function emitMoved(){
-    socket.emit('player_move', { 'name' : player.name , 'x' : player.x , 'y' : player.y });
+    socket.emit('player_move', { 'name' : player.name , 'x' : player.x , 'y' : player.y, 'direction' : player.direction, 'animationCounter' : player.animationCounter, 'animationCounterWeapon' : player.animationCounterWeapon});
 }
 
 socket = io.connect('http://127.0.0.1:9000');
@@ -187,11 +202,12 @@ socket.on('player_disconnect', function (data){
 });
 
 socket.on('players_positions', function (data){
-    for (var key in data) {
-        if(players[key] != undefined) {
-            players[key].x = data[key].x;
-            players[key].y = data[key].y;
-        }
+    if(players[data.name] != undefined){
+        players[data.name].x = data.x;
+        players[data.name].y = data.y;
+        players[data.name].direction = data.direction;
+        players[data.name].animationCounter = data.animationCounter;
+        players[data.name].animationCounterWeapon = data.animationCounterWeapon;
     }
 });
     

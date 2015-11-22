@@ -34,6 +34,7 @@ Player = function(name,x,y,width,height,velocity){
                 self.animationCounterWeapon = 0;
                 self.attacking = false;
             }
+            socket.emit('player_move', { 'name' : self.name , 'x' : self.x , 'y' : self.y, 'direction' : self.direction, 'animationCounter' : self.animationCounter, 'animationCounterWeapon' : self.animationCounterWeapon});
         }
     };
     
@@ -50,7 +51,8 @@ Player = function(name,x,y,width,height,velocity){
             self.direction = 2;
         }else{
             currentSprite = 1;
-            self.animationCounter = 0;
+            self.animationCounter = 1;
+            socket.emit('player_move', { 'name' : self.name , 'x' : self.x , 'y' : self.y, 'direction' : self.direction, 'animationCounter' : self.animationCounter, 'animationCounterWeapon' : self.animationCounterWeapon});
         }
         
         if(self.direction == 1){
@@ -79,6 +81,7 @@ Player = function(name,x,y,width,height,velocity){
     self.attack = function(){
         self.attacking = true;
         self.animationCounterWeapon += 0.3;
+        socket.emit('player_move', { 'name' : self.name , 'x' : self.x , 'y' : self.y, 'direction' : self.direction, 'animationCounter' : self.animationCounter, 'animationCounterWeapon' : self.animationCounterWeapon});
     };
     
     return self;

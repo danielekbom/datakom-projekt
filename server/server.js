@@ -37,11 +37,14 @@ ioServer.sockets.on('connection', function(socket){
 	socket.on('player_move', function (data){
 		players[data.name].x = data.x;
 		players[data.name].y = data.y;
+        players[data.name].direction = data.direction;
+        players[data.name].animationCounterWeapon = data.animationCounterWeapon;
+        socket.broadcast.emit('players_positions', {'name' : data.name, 'x' : data.x, 'y' : data.y, 'direction' : data.direction, 'animationCounter' : data.animationCounter, 'animationCounterWeapon' : data.animationCounterWeapon});
 	});
 
-	setInterval(function(){
-		socket.broadcast.emit('players_positions', players);
-	}, 60);
+	//setInterval(function(){
+	//	socket.broadcast.emit('players_positions', players);
+	//}, 60);
 
 });
 
@@ -53,5 +56,8 @@ Player = function(id,name,x,y){
         x:x,
         y:y
     };
+    self.direction = 2;
+    self.animationCounter = 0;
+    self.animationCounterWeapon = 0;
     return self;
 }
