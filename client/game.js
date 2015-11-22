@@ -12,6 +12,7 @@ var timestep = 1000 / 50;
 var ctx = null;
 var player = null;
 var socket = null;
+var map = null;
 
 var players = {};
 
@@ -39,6 +40,7 @@ $(document).ready(function(){
     ctx = canvas.getContext('2d');
     ctx.textAlign="center";
     ctx.font='bold 12px Arial';
+    map = getMap();
 
     var randomName = Math.floor((Math.random() * 1000) + 1);
     player = new Player("Player " + randomName,900,900,50,50,0.1); 
@@ -48,7 +50,7 @@ $(document).ready(function(){
 });
 
 function update(delta) {
-    player.update(delta);
+    player.update(delta, map);
     if(player.moveLeft || player.moveUp || player.moveRight || player.moveDown){
         emitMoved();
     }
@@ -62,8 +64,6 @@ function draw(){
 }
 
 function drawMap(){
-    var map = getMap();
-
     var tileX = 0;
     var tileY = 0;
     

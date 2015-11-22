@@ -19,11 +19,20 @@ Player = function(name,x,y,width,height,velocity){
     
     self.attacking = false;
     
-    self.update = function(delta){
-        if(self.moveLeft) self.x -= self.velocity * delta;
-        if(self.moveUp) self.y -= self.velocity * delta;
-        if(self.moveRight) self.x += self.velocity * delta;
-        if(self.moveDown) self.y += self.velocity * delta;
+    self.update = function(delta, map){
+        var playerX = Math.floor(self.x / 32);
+        var playerY = Math.floor(self.y / 32);
+        if(map[playerY][playerX] < 1000){
+            if(self.moveLeft) self.x -= self.velocity * delta;
+            if(self.moveUp) self.y -= self.velocity * delta;
+            if(self.moveRight) self.x += self.velocity * delta;
+            if(self.moveDown) self.y += self.velocity * delta;
+        }else{
+            if(self.moveLeft) self.x++;
+            if(self.moveUp) self.y++;
+            if(self.moveRight) self.x--;
+            if(self.moveDown) self.y--;
+        }
 
         self.animationCounter += 0.1;
         
