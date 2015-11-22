@@ -104,6 +104,11 @@ function drawMap(){
             if(map[y][x] == 29) ctx.drawImage(Img.ground1,384,256,32,32,tileX,tileY,tileSize,tileSize);
             if(map[y][x] == 30) ctx.drawImage(Img.ground1,448,320,32,32,tileX,tileY,tileSize,tileSize);
             if(map[y][x] == 31) ctx.drawImage(Img.ground1,384,320,32,32,tileX,tileY,tileSize,tileSize);
+            if(map[y][x] == 32) ctx.drawImage(Img.ground1,384,128,32,32,tileX,tileY,tileSize,tileSize);
+            if(map[y][x] == 33) ctx.drawImage(Img.ground1,448,128,32,32,tileX,tileY,tileSize,tileSize);
+            if(map[y][x] == 34) ctx.drawImage(Img.ground1,384,192,32,32,tileX,tileY,tileSize,tileSize);
+            if(map[y][x] == 35) ctx.drawImage(Img.ground1,448,192,32,32,tileX,tileY,tileSize,tileSize);
+            
             if(map[y][x] == 1000){
                 ctx.drawImage(Img.ground1,32,64,64,64,tileX,tileY,tileSize,tileSize);
                 ctx.drawImage(Img.objects1,160,70,64,64,tileX,tileY,tileSize,tileSize);
