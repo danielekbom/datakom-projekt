@@ -27,10 +27,17 @@ Player = function(name,x,y,width,height,velocity){
         var objectY = Math.floor(self.y / 32);
         
         if(map[objectY][objectX] >= 1000 && playerX < objectX*32 + 32 && playerX + 50 > objectX*32 && playerY < objectY*32 + 32 && playerY + 50 > objectY*32){
-            if(self.moveLeft) self.x += 10;
-            if(self.moveUp) self.y += 10;
-            if(self.moveRight) self.x -= 10;
-            if(self.moveDown) self.y -= 10;
+            var leftEdgeDelta = Math.abs(objectX*32-playerX);
+            var rightEdgeDelta = Math.abs(objectX*32+32-playerX);
+            var topEdgeDelta = Math.abs(objectY*32-playerY);
+            var bottomEdgeDelta = Math.abs(objectY*32+32-playerY);
+            
+            var minEdgeDelta = Math.min(leftEdgeDelta,rightEdgeDelta,topEdgeDelta,bottomEdgeDelta);
+            
+            if(minEdgeDelta == leftEdgeDelta) self.x -= self.velocity * delta * 2;
+            else if(minEdgeDelta == rightEdgeDelta) self.x += self.velocity * delta * 2;
+            else if(minEdgeDelta == topEdgeDelta) self.y -= self.velocity * delta * 2;
+            else if(minEdgeDelta == bottomEdgeDelta) self.y += self.velocity * delta * 2;
         }else{
             if(self.moveLeft) self.x -= self.velocity * delta;
             if(self.moveUp) self.y -= self.velocity * delta;
@@ -54,15 +61,11 @@ Player = function(name,x,y,width,height,velocity){
     self.draw = function(){
         var currentSprite = Math.floor(self.animationCounter) % 3;
         
-        if(self.moveLeft){
-            self.direction = 3;
-        }else if(self.moveUp){
-            self.direction = 0;
-        }else if(self.moveRight){
-            self.direction = 1;
-        }else if(self.moveDown){
-            self.direction = 2;
-        }else{
+        if(self.moveLeft) self.direction = 3;
+        else if(self.moveUp) self.direction = 0;
+        else if(self.moveRight) self.direction = 1;
+        else if(self.moveDown) self.direction = 2;
+        else{
             currentSprite = 1;
             self.animationCounter = 1;
             socket.emit('player_move', { 'name' : self.name , 'x' : self.x , 'y' : self.y, 'direction' : self.direction, 'animationCounter' : self.animationCounter, 'animationCounterWeapon' : self.animationCounterWeapon});
