@@ -20,29 +20,24 @@ Player = function(name,x,y,width,height,velocity){
     self.attacking = false;
     
     self.update = function(delta, map){
-        var playerX = self.x;
-        var playerY = self.y;
+
+        var movement = self.velocity * delta;
+        var nextX = self.x;
+        var nextY = self.y;
         
-        var objectX = Math.floor(self.x / 32);
-        var objectY = Math.floor(self.y / 32);
+        if(self.moveLeft) nextX -= movement;
+        if(self.moveUp) nextY -= movement;
+        if(self.moveRight) nextX += movement;
+        if(self.moveDown) nextY += movement;
         
-        if(map[objectY][objectX] >= 1000 && playerX < objectX*32 + 32 && playerX + 50 > objectX*32 && playerY < objectY*32 + 32 && playerY + 50 > objectY*32){
-            var leftEdgeDelta = Math.abs(objectX*32-playerX);
-            var rightEdgeDelta = Math.abs(objectX*32+32-playerX);
-            var topEdgeDelta = Math.abs(objectY*32-playerY);
-            var bottomEdgeDelta = Math.abs(objectY*32+32-playerY);
-            
-            var minEdgeDelta = Math.min(leftEdgeDelta,rightEdgeDelta,topEdgeDelta,bottomEdgeDelta);
-            
-            if(minEdgeDelta == leftEdgeDelta) self.x -= self.velocity * delta;
-            else if(minEdgeDelta == rightEdgeDelta) self.x += self.velocity * delta;
-            else if(minEdgeDelta == topEdgeDelta) self.y -= self.velocity * delta;
-            else if(minEdgeDelta == bottomEdgeDelta) self.y += self.velocity * delta;
+        var nextObjectX = Math.floor(nextX / 32);
+        var nextObjectY = Math.floor(nextY / 32);
+        
+        if(map[nextObjectY][nextObjectX] >= 1000 && nextX < nextObjectX*32 + 32 && nextX + 50 > nextObjectX*32 && nextY < nextObjectY*32 + 32 && nextY + 50 > nextObjectY*32){
+            //Collision
         }else{
-            if(self.moveLeft) self.x -= self.velocity * delta;
-            if(self.moveUp) self.y -= self.velocity * delta;
-            if(self.moveRight) self.x += self.velocity * delta;
-            if(self.moveDown) self.y += self.velocity * delta;
+            self.x = nextX;
+            self.y = nextY;
         }
 
         self.animationCounter += 0.1;
