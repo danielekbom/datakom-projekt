@@ -34,10 +34,10 @@ Player = function(name,x,y,width,height,velocity){
             
             var minEdgeDelta = Math.min(leftEdgeDelta,rightEdgeDelta,topEdgeDelta,bottomEdgeDelta);
             
-            if(minEdgeDelta == leftEdgeDelta) self.x -= self.velocity * delta * 2;
-            else if(minEdgeDelta == rightEdgeDelta) self.x += self.velocity * delta * 2;
-            else if(minEdgeDelta == topEdgeDelta) self.y -= self.velocity * delta * 2;
-            else if(minEdgeDelta == bottomEdgeDelta) self.y += self.velocity * delta * 2;
+            if(minEdgeDelta == leftEdgeDelta) self.x -= self.velocity * delta;
+            else if(minEdgeDelta == rightEdgeDelta) self.x += self.velocity * delta;
+            else if(minEdgeDelta == topEdgeDelta) self.y -= self.velocity * delta;
+            else if(minEdgeDelta == bottomEdgeDelta) self.y += self.velocity * delta;
         }else{
             if(self.moveLeft) self.x -= self.velocity * delta;
             if(self.moveUp) self.y -= self.velocity * delta;
