@@ -1,17 +1,39 @@
-/********************* Server stuff *********************/
-var http = require('http');
-var io = require('socket.io');
+var http = require('http').createServer(serverHandler);
+var ioServer = require('socket.io').listen(http, { log: false });
+var fs = require('fs');
 
-var httpServer = http.createServer(function(request,response){
- response.writeHead(200, {'Content-Type': 'text/plain'});
- response.end("This is the node.js HTTP server.");
-});
+http.listen('9000');
 
-httpServer.listen(9000,function(){
- console.log('Server has started listening on port 9000');
-});
+var defaultUrl = "/index.html";
+var contentTypesByExtension = {
+    '.html': "text/html",
+    '.css':  "text/css",
+    '.js':   "text/javascript"
+};
 
-ioServer = io.listen(httpServer, { log: false });
+var getExtension = function(url){
+	try{
+		var extensionRegex = /^.*(\.[a-z]*)$/i;
+		return url.match(extensionRegex)[1];
+	}catch(e){
+		return '.html';
+	}
+};
+
+function serverHandler (req, res) {
+	var url = req.url === "/" ? defaultUrl: req.url;
+
+  	fs.readFile('.' + url,
+	  	function (err, data) {
+	    	if (err) {
+	    		console.log(err);
+	      	res.writeHead(404);
+	      	return res.end('File not founddd');
+	    	}
+			res.writeHead(200, {"Content-Type": contentTypesByExtension[getExtension(req.url)]});
+		 	res.end(data);
+  });
+}
 
 var players = {};
 
