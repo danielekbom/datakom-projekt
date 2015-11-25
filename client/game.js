@@ -17,7 +17,7 @@ var map = null;
 socket = io.connect('http://127.0.0.1:9000/');
 
 var players = {};
-var items = [];
+var items = {};
 
 var Img = {};
 Img.ground1 = new Image();
@@ -278,10 +278,13 @@ function emitMoved(){
  * Gets all the other players from the server and places them in the players array.
  * 
  */
-socket.on('init_players', function (data){
+socket.on('init_players', function (playerList,itemList){
     for (var key in data) {
         if(data[key].name == player.name){ continue; }
         players[key] = data[key];
+    }
+    for (var key in itemList) {
+        items[key] = itemList[key];
     }
 });
 
@@ -314,4 +317,14 @@ socket.on('players_positions', function (data){
         players[data.name].animationCounterWeapon = data.animationCounterWeapon;
     }
 });
+
+Item = function(id,name,x,y){
+    var self = {
+        id:id,
+        name:name,
+        x:x,
+        y:y
+    };
+    return self;
+}
     
