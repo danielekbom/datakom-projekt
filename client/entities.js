@@ -45,11 +45,11 @@ Player = function(name,x,y,width,height,velocity){
         if(self.moveDown) nextY += movement;
         
         //Get the tile that the next position is in
-        var nextObjectX = Math.floor(nextX / 32);
-        var nextObjectY = Math.floor(nextY / 32);
+        var nextObjectX = Math.floor((nextX+22) / 32)-1;
+        var nextObjectY = Math.floor((nextY+50) / 32)-1;
         
-        //Collision detection. If the next tile is a collision object and the next position is inside that tile then do not move the player
-        if(map[nextObjectY][nextObjectX] >= 1000 && nextX < nextObjectX*32 + 32 && nextX + 50 > nextObjectX*32 && nextY < nextObjectY*32 + 32 && nextY + 50 > nextObjectY*32){
+        //Collision detection. If the next tile is a collision object it is a collision
+        if(map[nextObjectY][nextObjectX] >= 1000){
             //Collision
         }else{
             //Move the player by setting the current position to the next position
@@ -106,6 +106,8 @@ Player = function(name,x,y,width,height,velocity){
         ctx.fillText(self.name,ctx.canvas.width/2+22, ctx.canvas.height/2-8);
         //Draw the player using the current sprite and direction
         ctx.drawImage(Img.player,48*currentSprite,52*self.direction,52,52,ctx.canvas.width/2,ctx.canvas.height/2,self.width,self.height);
+        
+        ctx.fillText("O",ctx.canvas.width/2 + 22,ctx.canvas.height/2 + 50);
         
         //Draw the sword id direction equals to 2
         if(self.direction == 2){
