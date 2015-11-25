@@ -5,7 +5,7 @@ var fs = require('fs');
 
 var mapFile = require('./map');
 
-http.listen('9000'); // Listen on port 9000.
+http.listen('8500'); // Listen on port 9000.
 
 // Setting up mongoDB database using mongoose.
 var mongoose = require('mongoose');
@@ -73,28 +73,38 @@ ioServer.sockets.on('connection', function(socket){
     
 	socket.on('player_connect', function(data){
         socket.emit('init_game', map, players, items); // Send array with already connected players.
-		players[data.name] = new Player(socket.id, data.name, data.x, data.y); // Adds new player to array
-		socket.broadcast.emit('player_connect', {'name' : data.name, 'x' : data.x, 'y' : data.y}); // Tell other clients of new player.
 		console.log('Client connected: ' + data.name + '. With socket id:' + socket.id);
-        
-                // If old player
-        
-        // If new player
-        var newPlayer = new nPlayer({
-                            name: data.name, 
-                            x: data.x, 
-                            y: data.y, 
-                            healthPoints: 100, 
-                            inventory: {item1: 1,  // 1 for starting sword
-                                        item2: 0, 
-                                        item3: 0, 
-                                        item4: 0, 
-                                        item5: 0 } });
-        
-        // Save the new player to db.
-        newPlayer.save(function (err, newPlayer) {
+
+        // Check if player is in DB.
+        nPlayer.findOne({ name: data.name }, function(err, oldPlayer) {
           if (err) return console.error(err);
-          console.dir(newPlayer);
+          
+              if(!oldPlayer) { // If not found in DB create new player.
+                  console.log('Player NOT found in DB.'); // For testing only
+                  var newPlayer = new nPlayer({
+                                        name: data.name, 
+                                        x: data.x, 
+                                        y: data.y, 
+                                        healthPoints: 100, 
+                                        inventory: {item1: 1,  // 1 for starting sword
+                                                    item2: 0, 
+                                                    item3: 0, 
+                                                    item4: 0, 
+                                                    item5: 0 } 
+                    });
+
+                    // Save the new player to db.
+                    newPlayer.save(function (err, newPlayer) {
+                      if (err) return console.error(err); // Error handling
+                      //console.dir(newPlayer); // Prints whats been saved to DB. Remove later.
+                    });
+                  
+            } else {
+                console.log('Player found in DB.'); // For testing only
+                // Draw the old player
+                players[data.name] = new Player(socket.id, data.name, oldPlayer.x, oldPlayer.y);
+            }
+		    socket.broadcast.emit('player_connect', {'name' : data.name, 'x' : data.x, 'y' : data.y}); // Tell other clients of new player.
         });
 	});
 
