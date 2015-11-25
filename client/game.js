@@ -14,7 +14,7 @@ var player = null;
 var socket = null;
 var map = null;
 
-socket = io.connect('http://130.238.245.231:9000/');
+socket = io.connect('http://127.0.0.1:9000/');
 
 var players = {};
 

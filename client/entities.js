@@ -107,8 +107,6 @@ Player = function(name,x,y,width,height,velocity){
         //Draw the player using the current sprite and direction
         ctx.drawImage(Img.player,48*currentSprite,52*self.direction,52,52,ctx.canvas.width/2,ctx.canvas.height/2,self.width,self.height);
         
-        ctx.fillText("O",ctx.canvas.width/2 + 22,ctx.canvas.height/2 + 50);
-        
         //Draw the sword id direction equals to 2
         if(self.direction == 2){
             ctx.drawImage(Img.swords,32*Math.floor(self.animationCounterWeapon),64,32,32,ctx.canvas.width/2-tileSize+28,ctx.canvas.height/2+10,tileSize,tileSize);
