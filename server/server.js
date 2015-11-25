@@ -103,7 +103,8 @@ ioServer.sockets.on('connection', function(socket){
                 } else {
                     console.log('Player found in DB.'); // For testing only
                     // Draw the old player
-                    players[data.name] = new Player(socket.id, data.name, oldPlayer.x, oldPlayer.y);
+                    tempPlayer = new Player(socket.id, data.name, oldPlayer.x, oldPlayer.y);
+                    players[data.name] = tempPlayer;
                 }
                 socket.emit('init_game', map, players, items, tempPlayer); // Send array with already connected players.
                 socket.broadcast.emit('player_connect', {'name' : data.name, 'x' : data.x, 'y' : data.y}); // Tell other clients of new player.
@@ -111,10 +112,21 @@ ioServer.sockets.on('connection', function(socket){
 	});
 
     // Handles player disconnects
+    // Stores players position when player disconnects.
     socket.on('disconnect', function() {
         for (key in players){
             if(players[key].id  == socket.id){
                 console.log('Client disconnected: ' + key);
+                // Find the player i database and update his position.
+                nPlayer.findOne({ name: players[key].name }, function(err, discPlayer) {
+                    if (err) return console.error(err); // Error handling
+                        if(!discPlayer) { 
+                            console.log('ERROR: Player not found in db while disconnecting.')
+                        } else {
+                            discPlayer.x = players[key].x;
+                            discPlayer.y = players[key].y;
+                        }
+                });
                 socket.broadcast.emit('player_disconnect', {'name' : players[key].name});
                 delete players[key];
             }
