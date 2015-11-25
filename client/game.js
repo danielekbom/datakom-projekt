@@ -17,6 +17,7 @@ var map = null;
 socket = io.connect('http://127.0.0.1:9000/');
 
 var players = {};
+var items = [];
 
 var Img = {};
 Img.ground1 = new Image();

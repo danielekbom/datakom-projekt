@@ -2,7 +2,6 @@
 var http = require('http').createServer(serverHandler);
 var ioServer = require('socket.io').listen(http, { log: false });
 var fs = require('fs');
-var players = {};
 
 http.listen('9000'); // Listen on port 9000.
 
@@ -52,7 +51,7 @@ ioServer.sockets.on('connection', function(socket){
     
     //socket.setTimeout( 10000 );
 	socket.on('player_connect', function(data){
-        socket.emit('init_players', players); // Send array with already connected players.
+        socket.emit('init_players', players, items); // Send array with already connected players.
 		players[data.name] = new Player(socket.id, data.name, data.x, data.y); // Adds new player to array
 		socket.broadcast.emit('player_connect', {'name' : data.name, 'x' : data.x, 'y' : data.y}); // Tell other clients of new player.
 		console.log('Client connected: ' + data.name + '. With socket id:' + socket.id);
@@ -93,6 +92,10 @@ ioServer.sockets.on('connection', function(socket){
 
 });
 
+
+var players = {};
+var items = [];
+
 /********************* Player class *********************
     ID: socket.id of client
     Name: player name
@@ -111,3 +114,16 @@ Player = function(id,name,x,y){
     self.animationCounterWeapon = 0;
     return self;
 }
+
+/********************* Item class *********************/
+Item = function(id,name,x,y){
+    var self = {
+        id:id,
+        name:name,
+        x:x,
+        y:y
+    };
+    return self;
+}
+
+items.push(new Item(12345,'Axe', 500, 500));
