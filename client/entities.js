@@ -26,7 +26,9 @@ Player = function(name,x,y,width,height,velocity){
     
     //True if player is attacking
     self.attacking = false;
-    
+
+    //the active item of the player
+    self.activeItem = 'sword';
     //Update loop that updates all game logic, is called from mainLoop.
     //delta is a timestamp used to make all clients synced.
     self.update = function(delta, map){
