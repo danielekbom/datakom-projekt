@@ -4,15 +4,17 @@ var canvasWidth = tileSize*30;
 var canvasHeight = tileSize*20;
 
 var lastFrameTimeMs = 0;
-var maxFPS = 60;
+var maxFPS = 50;
 var delta = 0;
-var timestep = 1000 / 60;
+var timestep = 1000 / 50;
 /*************************/
 
 var ctx = null; //canvas context variable
 var player = null;
 var socket = null;
 var map = null;
+
+socket = io.connect('http://130.238.245.231:9000/');
 
 var players = {};
 
@@ -47,7 +49,7 @@ $(document).ready(function(){
     map = getMap(); //gets the map array form map.js
 
     var randomName = Math.floor((Math.random() * 1000) + 1); //player name
-    player = new Player("Player " + randomName,900,900,50,50,0.1); 
+    player = new Player("Player " + randomName,900,900,50,50,0.1); //class in entities.js
     emitConnected(); //send to server
     
     requestAnimationFrame(mainLoop);
@@ -136,6 +138,12 @@ function drawMap(){
     }
 }
 
+/**
+ * Game main loop!
+ * Calculates time since last frame was drawn then updates the world since that time.
+ * 
+ *
+ */
 function mainLoop(timestamp) {
     // Throttle the frame rate.    
     if (timestamp < lastFrameTimeMs + (1000 / maxFPS)) {
@@ -153,6 +161,11 @@ function mainLoop(timestamp) {
     requestAnimationFrame(mainLoop);
 }
 
+/**
+ * Key is pressed and detected
+ * perform player action for the keypress
+ * example: left arrow -> player moves left.
+ */ 
 document.onkeydown = function(event){
     switch(event.keyCode){
         case 37:
@@ -178,6 +191,11 @@ document.onkeydown = function(event){
     }
 };
 
+/**
+ * Key is released
+ * stops performing player action for the keypress
+ * example: left arrow -> player stops moving left.
+ */
 document.onkeyup = function(event){
     switch(event.keyCode){
         case 37:
@@ -195,12 +213,19 @@ document.onkeyup = function(event){
     }
 };
 
+/**
+ * Mouse press action
+ */
 document.onmousedown = function(mouse){
 	if(mouse.which === 1){
 		player.LeftMouse(mouse);
     }
 }
 
+/**
+ * Draws all players
+ * 
+ */
 function drawPlayers(){
     var currentSprite = 0;
     for (var key in players) {
@@ -227,16 +252,26 @@ function drawPlayers(){
     }
 }
 
+/**
+ * Sends to node that this player wishes to connect.
+ * 
+ */
 function emitConnected(){
     socket.emit('player_connect', { 'name' : player.name , 'x' : player.x, 'y' : player.y });
 }
 
+/**
+ * Sends to node that this player whas moved.
+ * 
+ */
 function emitMoved(){
     socket.emit('player_move', { 'name' : player.name , 'x' : player.x , 'y' : player.y, 'direction' : player.direction, 'animationCounter' : player.animationCounter, 'animationCounterWeapon' : player.animationCounterWeapon});
 }
 
-socket = io.connect('http://130.238.245.231:9000/');
-
+/**
+ * Gets all the other players from the server and places them in the players array.
+ * 
+ */
 socket.on('init_players', function (data){
     for (var key in data) {
         if(data[key].name == player.name){ continue; }
@@ -244,14 +279,26 @@ socket.on('init_players', function (data){
     }
 });
 
+/**
+ * Gets a newly connected player from the server and places it in the players array.
+ * 
+ */
 socket.on('player_connect', function (data){
     players[data.name] = new Player(data.name,data.x,data.y,50,50,0.1);
 });
 
+/**
+ * Gets a newly disconnected player from the server and removes it from the players array.
+ * 
+ */
 socket.on('player_disconnect', function (data){
     delete players[data.name];
 });
 
+/**
+ * Gets a players positions from the server.
+ *
+ */
 socket.on('players_positions', function (data){
     if(players[data.name] != undefined){
         players[data.name].x = data.x;
