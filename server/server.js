@@ -134,4 +134,5 @@ Item = function(id,name,x,y){
     return self;
 }
 
-items[12345] = new Item(12345,'Axe', 500, 500);
+items[12345] = new Item(12345,'Axe', 1000, 1000);
+items[12346] = new Item(12346,'Axe', 1500, 1500);

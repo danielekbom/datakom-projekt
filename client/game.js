@@ -34,6 +34,8 @@ Img.player = new Image();
 Img.player.src = "client/images/player.png";
 Img.swords = new Image();
 Img.swords.src = "client/images/swords.png";
+Img.axes = new Image();
+Img.axes.src = "client/images/axe.png";
 
 /**
  * Initialization function
@@ -81,6 +83,7 @@ function draw(){
     drawMap();
     player.draw();
     drawPlayers();
+    drawItems();
 }
 
 /**
@@ -258,6 +261,16 @@ function drawPlayers(){
     }
 }
 
+function drawItems(){
+    for(var key in items){
+        var xDelta = items[key].x - player.x;
+        var yDelta = items[key].y - player.y;
+        if(Math.abs(xDelta) < tileSize * 16 && Math.abs(yDelta) < tileSize * 11){
+            ctx.drawImage(Img.axes,0,0,32,32,canvasWidth/2+xDelta,canvasHeight/2+yDelta,32,32);
+        }
+    }
+}
+
 /**
  * Sends to node that this player wishes to connect.
  * 
@@ -279,9 +292,9 @@ function emitMoved(){
  * 
  */
 socket.on('init_players', function (playerList,itemList){
-    for (var key in data) {
-        if(data[key].name == player.name){ continue; }
-        players[key] = data[key];
+    for (var key in playerList) {
+        if(playerList[key].name == player.name){ continue; }
+        players[key] = playerList[key];
     }
     for (var key in itemList) {
         items[key] = itemList[key];
