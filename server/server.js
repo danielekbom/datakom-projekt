@@ -50,7 +50,7 @@ function serverHandler (req, res) {
 ioServer.sockets.on('connection', function(socket){
 	
 	socket.on('player_connect', function(data){
-        socket.emit('init_players', players); // Send array with already connected players.
+        socket.emit('init_players', players, items); // Send array with already connected players.
 		players[data.name] = new Player(socket.id, data.name, data.x, data.y); // Adds new player to array
 		socket.broadcast.emit('player_connect', {'name' : data.name, 'x' : data.x, 'y' : data.y}); // Tell other clients of new player.
 		console.log('Client connected: ' + data.name + '. With socket id:' + socket.id);
