@@ -94,7 +94,7 @@ ioServer.sockets.on('connection', function(socket){
 
 
 var players = {};
-var items = [];
+var items = {};
 
 /********************* Player class *********************
     ID: socket.id of client
@@ -126,4 +126,4 @@ Item = function(id,name,x,y){
     return self;
 }
 
-items.push(new Item(12345,'Axe', 500, 500));
+items[12345] = new Item(12345,'Axe', 500, 500);
