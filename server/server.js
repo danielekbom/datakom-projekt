@@ -47,7 +47,6 @@ function serverHandler (req, res) {
   });
 }
 
-
 // Handles connections to the port we are listening to.
 ioServer.sockets.on('connection', function(socket){
 	
@@ -56,17 +55,18 @@ ioServer.sockets.on('connection', function(socket){
 		players[data.name] = new Player(socket.id, data.name, data.x, data.y); // Adds new player to array
 		socket.broadcast.emit('player_connect', {'name' : data.name, 'x' : data.x, 'y' : data.y}); // Tell other clients of new player.
 		console.log('Client connected: ' + data.name + '. With socket id:' + socket.id);
-	})
-    
-    socket.on('player_disconnect', function(){
-		for (key in players){
-			if(players[key].socketId  == socket.id){
-				console.log('Client disconnected: ' + key);
-				socket.broadcast.emit('player_disconnect', {'name' : players[key].name});
-				delete players[key];
-			}
-		}
-	})
+	});
+
+    // Handles player disconnects
+    socket.on('disconnect', function() {
+        for (key in players){
+            if(players[key].id  == socket.id){
+                console.log('Client disconnected: ' + key);
+                socket.broadcast.emit('player_disconnect', {'name' : players[key].name});
+                delete players[key];
+            }
+        }
+    });
 
 	socket.on('player_move', function (data){
 		players[data.name].x = data.x;
