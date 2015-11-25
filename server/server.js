@@ -1,16 +1,24 @@
+// Setting up variables for server.
 var http = require('http').createServer(serverHandler);
 var ioServer = require('socket.io').listen(http, { log: false });
 var fs = require('fs');
+var players = {};
 
-http.listen('9000');
+http.listen('9000'); // Listen on port 9000.
 
 var defaultUrl = "/index.html";
+
+// Filetypes we want to be able to return to client.
 var contentTypesByExtension = {
     '.html': "text/html",
     '.css':  "text/css",
     '.js':   "text/javascript"
 };
 
+/* getExternsion
+Gets URL and returns fileextension.
+If none found return .html
+*/
 var getExtension = function(url){
 	try{
 		var extensionRegex = /^.*(\.[a-z]*)$/i;
@@ -20,30 +28,34 @@ var getExtension = function(url){
 	}
 };
 
+/* serverHandler
+Gets a request for a file and returns the data of the file.
+*/
 function serverHandler (req, res) {
-	var url = req.url === "/" ? defaultUrl: req.url;
+	var url = req.url === "/" ? defaultUrl: req.url; // If no specific URL asked for send defaultUrl.
 
+    //Return file
   	fs.readFile('.' + url,
 	  	function (err, data) {
 	    	if (err) {
 	    		console.log(err);
 	      	res.writeHead(404);
-	      	return res.end('File not founddd');
+	      	return res.end('File not found.');
 	    	}
 			res.writeHead(200, {"Content-Type": contentTypesByExtension[getExtension(req.url)]});
 		 	res.end(data);
   });
 }
 
-var players = {};
 
+// Handles connections to the port we are listening to.
 ioServer.sockets.on('connection', function(socket){
 	
 	socket.on('player_connect', function(data){
-        socket.emit('init_players', players);
-		players[data.name] = new Player(socket.id, data.name, data.x, data.y);
-		socket.broadcast.emit('player_connect', {'name' : data.name, 'x' : data.x, 'y' : data.y});
-		console.log('Client connected: ' + data.name);
+        socket.emit('init_players', players); // Send array with already connected players.
+		players[data.name] = new Player(socket.id, data.name, data.x, data.y); // Adds new player to array
+		socket.broadcast.emit('player_connect', {'name' : data.name, 'x' : data.x, 'y' : data.y}); // Tell other clients of new player.
+		console.log('Client connected: ' + data.name + '. With socket id:' + socket.id);
 	})
     
     socket.on('player_disconnect', function(){
@@ -70,7 +82,12 @@ ioServer.sockets.on('connection', function(socket){
 
 });
 
-/********************* Player class *********************/
+/********************* Player class *********************
+    ID: socket.id of client
+    Name: player name
+    x: x-coordinate
+    y: y-coordinate
+*/
 Player = function(id,name,x,y){
     var self = {
         id:id,
