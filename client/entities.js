@@ -27,8 +27,11 @@ Player = function(name,x,y,width,height,velocity){
     //True if player is attacking
     self.attacking = false;
 
+    self.items = {};
+    
     //the active item of the player
-    self.activeItem = 'sword';
+    self.activeItem = null;
+    
     //Update loop that updates all game logic, is called from mainLoop.
     //delta is a timestamp used to make all clients synced.
     self.update = function(delta, map){
@@ -58,7 +61,15 @@ Player = function(name,x,y,width,height,velocity){
             self.x = nextX;
             self.y = nextY;
         }
-
+        
+        for(key in items){
+            if(Math.abs(items[key].x - self.x) < 32 && Math.abs(items[key].y - self.y) < 32){
+                self.items["axe"] = items[key];
+                self.activeItem = "axe";
+                delete items[key];
+            } 
+        }
+        
         //Increase the animationCounter by 0.1 every time the update function run.
         self.animationCounter += 0.1;
         
@@ -95,13 +106,15 @@ Player = function(name,x,y,width,height,velocity){
             socket.emit('player_move', { 'name' : self.name , 'x' : self.x , 'y' : self.y, 'direction' : self.direction, 'animationCounter' : self.animationCounter, 'animationCounterWeapon' : self.animationCounterWeapon});
         }
         
+        var weaponImage = self.activeItem == 'axe' ? Img.axes : Img.swords;
+        
         //Draw the sword in the correct direction and with the correct sprite using the animationCounterWeapon
         if(self.direction == 1){
-            ctx.drawImage(Img.swords,32*Math.floor(self.animationCounterWeapon),0,32,32,ctx.canvas.width/2+tileSize-10,ctx.canvas.height/2+5,tileSize,tileSize);
+            ctx.drawImage(weaponImage,32*Math.floor(self.animationCounterWeapon),0,32,32,ctx.canvas.width/2+tileSize-10,ctx.canvas.height/2+5,tileSize,tileSize);
         }else if(self.direction == 3){
-            ctx.drawImage(Img.swords,32*Math.floor(self.animationCounterWeapon),32,32,32,ctx.canvas.width/2-tileSize+25,ctx.canvas.height/2+8,tileSize,tileSize);
+            ctx.drawImage(weaponImage,32*Math.floor(self.animationCounterWeapon),32,32,32,ctx.canvas.width/2-tileSize+25,ctx.canvas.height/2+8,tileSize,tileSize);
         }else if(self.direction == 0){
-            ctx.drawImage(Img.swords,32*Math.floor(self.animationCounterWeapon),64,32,32,ctx.canvas.width/2+tileSize-12,ctx.canvas.height/2+4,tileSize,tileSize);
+            ctx.drawImage(weaponImage,32*Math.floor(self.animationCounterWeapon),64,32,32,ctx.canvas.width/2+tileSize-12,ctx.canvas.height/2+4,tileSize,tileSize);
         }
         
         //Draw the players name above the player
@@ -111,7 +124,7 @@ Player = function(name,x,y,width,height,velocity){
         
         //Draw the sword id direction equals to 2
         if(self.direction == 2){
-            ctx.drawImage(Img.swords,32*Math.floor(self.animationCounterWeapon),64,32,32,ctx.canvas.width/2-tileSize+28,ctx.canvas.height/2+10,tileSize,tileSize);
+            ctx.drawImage(weaponImage,32*Math.floor(self.animationCounterWeapon),64,32,32,ctx.canvas.width/2-tileSize+28,ctx.canvas.height/2+10,tileSize,tileSize);
         }
     };
     
@@ -134,6 +147,13 @@ Player = function(name,x,y,width,height,velocity){
         self.animationCounterWeapon += 0.3;
         //Send information to the server with the new animation data
         socket.emit('player_move', { 'name' : self.name , 'x' : self.x , 'y' : self.y, 'direction' : self.direction, 'animationCounter' : self.animationCounter, 'animationCounterWeapon' : self.animationCounterWeapon});
+    };
+    
+    self.switchWeapon = function(){
+        if(self.items["axe"] !== undefined){
+            self.activeItem = self.activeItem == "axe" ? "sword" : "axe";
+        }
+        console.log("fsdfsd");
     };
     
     //Return the new player

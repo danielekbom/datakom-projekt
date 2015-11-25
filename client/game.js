@@ -60,6 +60,8 @@ $(document).ready(function(){
     player = new Player("Player " + randomName,900,900,50,50,0.1); //class in entities.js
     emitConnected(); //send to server
     
+    initGame();
+    
     requestAnimationFrame(mainLoop);
 });
 
@@ -197,6 +199,10 @@ document.onkeydown = function(event){
             event.preventDefault();
             player.SpaceButton();
             break;
+        case 81:
+            event.preventDefault();
+            player.switchWeapon();
+            break;
     }
 };
 
@@ -285,6 +291,11 @@ function emitConnected(){
  */
 function emitMoved(){
     socket.emit('player_move', { 'name' : player.name , 'x' : player.x , 'y' : player.y, 'direction' : player.direction, 'animationCounter' : player.animationCounter, 'animationCounterWeapon' : player.animationCounterWeapon});
+}
+
+function initGame(){
+    player.items['sword'] = new Item(123432435, 'sword', 0, 0);
+    player.activeItem = 'sword';
 }
 
 /**
