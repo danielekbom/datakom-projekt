@@ -7,6 +7,26 @@ var mapFile = require('./map');
 
 http.listen('9000'); // Listen on port 9000.
 
+// Setting up mongoDB database using mongoose.
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/test');
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'DB connection error:'));
+db.once('open', function (callback) {
+    console.log("DB connection OK");
+});
+
+// Schema used by mongoose to define items stored in db.
+var playerSchema = new mongoose.Schema({
+  name:  { type: String },
+  x: Number,
+  y: Number,
+  healthPoints: Number,
+  inventory: {item1: Number, item2: Number, item3: Number, item4: Number, item5: Number } // ID numbers of items.
+});
+
+var nPlayer = mongoose.model('nPlayer', playerSchema);
+
 var defaultUrl = "/index.html";
 
 // Filetypes we want to be able to return to client.
@@ -56,6 +76,26 @@ ioServer.sockets.on('connection', function(socket){
 		players[data.name] = new Player(socket.id, data.name, data.x, data.y); // Adds new player to array
 		socket.broadcast.emit('player_connect', {'name' : data.name, 'x' : data.x, 'y' : data.y}); // Tell other clients of new player.
 		console.log('Client connected: ' + data.name + '. With socket id:' + socket.id);
+        
+                // If old player
+        
+        // If new player
+        var newPlayer = new nPlayer({
+                            name: data.name, 
+                            x: data.x, 
+                            y: data.y, 
+                            healthPoints: 100, 
+                            inventory: {item1: 1,  // 1 for starting sword
+                                        item2: 0, 
+                                        item3: 0, 
+                                        item4: 0, 
+                                        item5: 0 } });
+        
+        // Save the new player to db.
+        newPlayer.save(function (err, newPlayer) {
+          if (err) return console.error(err);
+          console.dir(newPlayer);
+        });
 	});
 
     // Handles player disconnects
