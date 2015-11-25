@@ -10,18 +10,20 @@
     <canvas id="game-canvas" style="visibility:hidden; height:0px;">
       Your browser does not support HTML5
     </canvas>
-    <h1 style="font-family:arial; color:white;">Awesome game</h1>
-    <div style="width:200px; height:140px; border:2px solid black; padding:20px; margin:auto; background-color:white;">
-        <h3 style="font-family:arial; margin:0px;">Login</h3><br />
-        <input id="username-login-input" type="text" style="width:180px; height:25px; margin-bottom:10px;" /><br />
-        <input id="password-login-input" type="password" style="width:180px; height:25px; margin-bottom:10px;" />
-        <button id="login-button">Login</button>
-    </div>
-    <div style="width:200px; height:140px; border:2px solid black; padding:20px; margin:auto; margin-top:50px; background-color:white;">
-        <h3 style="font-family:arial; margin:0px;">Signup</h3><br >
-        <input id="username-signup-input" type="text" style="width:180px; height:25px; margin-bottom:10px;" /><br />
-        <input id="password-signup-input" type="password" style="width:180px; height:25px; margin-bottom:10px;" />
-        <button id="signup-button">Signup</button>
+    <div id="startpage">
+        <h1 style="font-family:arial; color:white;">Awesome game</h1>
+        <div style="width:200px; height:140px; border:2px solid black; padding:20px; margin:auto; background-color:white;">
+            <h3 style="font-family:arial; margin:0px;">Login</h3><br />
+            <input id="username-login-input" type="text" style="width:180px; height:25px; margin-bottom:10px;" /><br />
+            <input id="password-login-input" type="password" style="width:180px; height:25px; margin-bottom:10px;" />
+            <button id="login-button">Login</button>
+        </div>
+        <div style="width:200px; height:140px; border:2px solid black; padding:20px; margin:auto; margin-top:50px; background-color:white;">
+            <h3 style="font-family:arial; margin:0px;">Signup</h3><br >
+            <input id="username-signup-input" type="text" style="width:180px; height:25px; margin-bottom:10px;" /><br />
+            <input id="password-signup-input" type="password" style="width:180px; height:25px; margin-bottom:10px;" />
+            <button id="signup-button">Signup</button>
+        </div>
     </div>
 </body>
     
@@ -32,15 +34,15 @@
 <script src="client/game.js"></script>
     
 <script>
-    $("#login-button").click(function() {
-        var username = $("#username-login-input").val();
-        var password = $("#password-login-input").val();
-        socket.emit('player_connect', { 'name' : name 'password' : password});
-    });
+    $(document).ready(function(){
+        $("#login-button").click(function() {
+            login();
+        });
     
-    socket.on('login_response', function(data) {
-        $("#game-canvas").css(["height", "500", "visibility", "visible"]);
-    }
+    });
+    //socket.on('login_response', function(data) {
+    //    $("#game-canvas").css(["height", "500", "visibility", "visible"]);
+    //}
     
 </script>
 

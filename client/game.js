@@ -61,9 +61,9 @@ $(document).ready(function(){
     
     emitConnected(); //send to server
     
-    initGame();
+    //initGame();
     
-    requestAnimationFrame(mainLoop);
+    //requestAnimationFrame(mainLoop);
 });
 
 /**
@@ -234,7 +234,7 @@ document.onkeyup = function(event){
  */
 document.onmousedown = function(mouse){
 	if(mouse.which === 1){
-		player.LeftMouse(mouse);
+	//	player.LeftMouse(mouse);
     }
 }
 
@@ -283,7 +283,7 @@ function drawItems(){
  * 
  */
 function emitConnected(){
-    socket.emit('player_connect', { 'name' : player.name , 'x' : player.x, 'y' : player.y });
+    //socket.emit('player_connect', { 'name' : player.name , 'x' : player.x, 'y' : player.y });
 }
 
 /**
@@ -307,7 +307,7 @@ function initGame(){
  */
 socket.on('init_game', function (mapFromServer, playerList,itemList, tempPlayer){
     //map = mapFromServer;
-    player = tempPlayer;
+    player = new Player(tempPlayer.name, tempPlayer.x, tempPlayer.y, 50, 50, 0.1);
     
     for (var key in playerList) {
         if(playerList[key].name == player.name){ continue; }
@@ -316,6 +316,11 @@ socket.on('init_game', function (mapFromServer, playerList,itemList, tempPlayer)
     for (var key in itemList) {
         items[key] = itemList[key];
     }
+    
+    $("#startpage").hide();
+    $("#game-canvas").css({"height": canvasHeight, "width": canvasWidth, "visibility": "visible"});
+    initGame();
+    requestAnimationFrame(mainLoop);
 });
 
 /**
@@ -347,6 +352,12 @@ socket.on('players_positions', function (data){
         players[data.name].animationCounterWeapon = data.animationCounterWeapon;
     }
 });
+
+function login(){
+    var name = $("#username-login-input").val();
+    var password = $("#password-login-input").val();
+    socket.emit('player_connect', { 'name' : name, 'password' : password});
+}
 
 Item = function(id,name,x,y){
     var self = {

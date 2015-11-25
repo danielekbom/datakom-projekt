@@ -5,7 +5,7 @@ var fs = require('fs');
 
 var mapFile = require('./map');
 
-http.listen('8500'); // Listen on port 9000.
+http.listen('9000'); // Listen on port 9000.
 
 // Setting up mongoDB database using mongoose.
 var mongoose = require('mongoose');
@@ -72,7 +72,7 @@ function serverHandler (req, res) {
 ioServer.sockets.on('connection', function(socket){
     
 	socket.on('player_connect', function(data){
-        socket.emit('init_game', map, players, items); // Send array with already connected players.
+        //socket.emit('init_game', map, players, items); // Send array with already connected players.
 		console.log('Client connected: ' + data.name + '. With socket id:' + socket.id);
 
         // Check if player is in DB.
@@ -123,8 +123,8 @@ ioServer.sockets.on('connection', function(socket){
                         if(!discPlayer) { 
                             console.log('ERROR: Player not found in db while disconnecting.')
                         } else {
-                            discPlayer.x = players[key].x;
-                            discPlayer.y = players[key].y;
+                            //discPlayer.x = players[key].x;
+                            //discPlayer.y = players[key].y;
                         }
                 });
                 socket.broadcast.emit('player_disconnect', {'name' : players[key].name});
