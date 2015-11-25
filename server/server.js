@@ -49,7 +49,6 @@ function serverHandler (req, res) {
 // Handles connections to the port we are listening to.
 ioServer.sockets.on('connection', function(socket){
     
-    //socket.setTimeout( 10000 );
 	socket.on('player_connect', function(data){
         socket.emit('init_players', players, items); // Send array with already connected players.
 		players[data.name] = new Player(socket.id, data.name, data.x, data.y); // Adds new player to array
@@ -85,7 +84,15 @@ ioServer.sockets.on('connection', function(socket){
         players[data.name].animationCounterWeapon = data.animationCounterWeapon;
         socket.broadcast.emit('players_positions', {'name' : data.name, 'x' : data.x, 'y' : data.y, 'direction' : data.direction, 'animationCounter' : data.animationCounter, 'animationCounterWeapon' : data.animationCounterWeapon});
 	});
+    
+    socket.on('player_die', function (data){
+        // TODO
+    });
 
+    socket.on('player_attack', function(data) {
+        // TODO
+    });
+    
 	//setInterval(function(){
 	//	socket.broadcast.emit('players_positions', players);
 	//}, 60);
@@ -112,6 +119,7 @@ Player = function(id,name,x,y){
     self.direction = 2;
     self.animationCounter = 0;
     self.animationCounterWeapon = 0;
+    self.healthPoints = 100;
     return self;
 }
 
