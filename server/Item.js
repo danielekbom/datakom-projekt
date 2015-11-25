@@ -13,7 +13,7 @@ Item = function(itemType,sortName, image){
     var self = {
         itemType : itemType,
         itemSort : sortName,
-        image : image
+        imageSource : image
     };
     return self;
 }
