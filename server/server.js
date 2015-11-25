@@ -77,14 +77,13 @@ ioServer.sockets.on('connection', function(socket){
 
         // Check if player is in DB.
         nPlayer.findOne({ name: data.name }, function(err, oldPlayer) {
-          if (err) return console.error(err);
-          
-              if(!oldPlayer) { // If not found in DB create new player.
+          if (err) return console.error(err); // Error handling
+              if(!oldPlayer) { // If not found in DB create new player. (oldPlayer = NULL)
                   console.log('Player NOT found in DB.'); // For testing only
                   var newPlayer = new nPlayer({
                                         name: data.name, 
-                                        x: data.x, 
-                                        y: data.y, 
+                                        x: 900, 
+                                        y: 900, 
                                         healthPoints: 100, 
                                         inventory: {item1: 1,  // 1 for starting sword
                                                     item2: 0, 
@@ -98,13 +97,16 @@ ioServer.sockets.on('connection', function(socket){
                       if (err) return console.error(err); // Error handling
                       //console.dir(newPlayer); // Prints whats been saved to DB. Remove later.
                     });
-                  
-            } else {
-                console.log('Player found in DB.'); // For testing only
-                // Draw the old player
-                players[data.name] = new Player(socket.id, data.name, oldPlayer.x, oldPlayer.y);
-            }
-		    socket.broadcast.emit('player_connect', {'name' : data.name, 'x' : data.x, 'y' : data.y}); // Tell other clients of new player.
+                    tempPlayer = new Player(socket.id, data.name, newPlayer.x, newPlayer.y);
+                    players[data.name] = tempPlayer; // Adds new player to array
+            
+                } else {
+                    console.log('Player found in DB.'); // For testing only
+                    // Draw the old player
+                    players[data.name] = new Player(socket.id, data.name, oldPlayer.x, oldPlayer.y);
+                }
+                socket.emit('init_game', map, players, items, tempPlayer); // Send array with already connected players.
+                socket.broadcast.emit('player_connect', {'name' : data.name, 'x' : data.x, 'y' : data.y}); // Tell other clients of new player.
         });
 	});
 
