@@ -57,7 +57,7 @@ $(document).ready(function(){
      sound.play();
 
     var randomName = Math.floor((Math.random() * 1000) + 1); //player name
-    player = new Player("Player " + randomName,900,900,50,50,0.1); //class in entities.js
+    //player = new Player("Player " + randomName,900,900,50,50,0.1); //class in entities.js
     
     emitConnected(); //send to server
     
@@ -305,8 +305,9 @@ function initGame(){
  * Gets all the other players from the server and places them in the players array.
  * 
  */
-socket.on('init_game', function (mapFromServer, playerList,itemList){
+socket.on('init_game', function (mapFromServer, playerList,itemList, tempPlayer){
     //map = mapFromServer;
+    player = tempPlayer;
     
     for (var key in playerList) {
         if(playerList[key].name == player.name){ continue; }
