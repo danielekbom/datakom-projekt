@@ -45,8 +45,8 @@ Player = function(name,x,y,width,height,velocity){
         if(self.moveDown) nextY += movement;
         
         //Get the tile that the next position is in
-        var nextObjectX = Math.floor((nextX+22) / 32)-1;
-        var nextObjectY = Math.floor((nextY+50) / 32)-1;
+        var nextObjectX = Math.floor((nextX+22) / 32) - 1;
+        var nextObjectY = Math.floor((nextY+45) / 32) - 1;
         
         //Collision detection. If the next tile is a collision object it is a collision
         if(map[nextObjectY][nextObjectX] >= 1000){
