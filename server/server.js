@@ -49,7 +49,8 @@ function serverHandler (req, res) {
 
 // Handles connections to the port we are listening to.
 ioServer.sockets.on('connection', function(socket){
-	
+    
+    //socket.setTimeout( 10000 );
 	socket.on('player_connect', function(data){
         socket.emit('init_players', players); // Send array with already connected players.
 		players[data.name] = new Player(socket.id, data.name, data.x, data.y); // Adds new player to array
@@ -62,6 +63,16 @@ ioServer.sockets.on('connection', function(socket){
         for (key in players){
             if(players[key].id  == socket.id){
                 console.log('Client disconnected: ' + key);
+                socket.broadcast.emit('player_disconnect', {'name' : players[key].name});
+                delete players[key];
+            }
+        }
+    });
+    
+    socket.on('timeout', function() {
+        for (key in players){
+            if(players[key].id  == socket.id){
+                console.log('Client disconnected (Timeout): ' + key);
                 socket.broadcast.emit('player_disconnect', {'name' : players[key].name});
                 delete players[key];
             }

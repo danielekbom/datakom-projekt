@@ -14,7 +14,7 @@ var player = null;
 var socket = null;
 var map = null;
 
-socket = io.connect('http://130.238.245.231:9000/');
+socket = io.connect('http://127.0.0.1:9000/');
 
 var players = {};
 
@@ -47,6 +47,11 @@ $(document).ready(function(){
     ctx.textAlign="center";
     ctx.font='bold 12px Arial';
     map = getMap(); //gets the map array form map.js
+    
+    var sound = new Audio();
+     // Load sound file with the detected extension
+     sound.src = "/client/music/Main.mp3";
+     sound.play();
 
     var randomName = Math.floor((Math.random() * 1000) + 1); //player name
     player = new Player("Player " + randomName,900,900,50,50,0.1); //class in entities.js
