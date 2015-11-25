@@ -335,8 +335,37 @@ socket.on('players_positions', function (data){
 function login(){
     var name = $("#username-login-input").val();
     var password = $("#password-login-input").val();
-    socket.emit('player_connect', { 'name' : name, 'password' : password});
+    socket.emit('player_login', { 'name' : name, 'password' : password});
 }
+
+function signup(){
+    var name = $("#username-signup-input").val();
+    var password = $("#password-signup-input").val();
+    socket.emit('player_signup', { 'name' : name, 'password' : password});
+}
+
+socket.on('player_signed_up', function(data){
+    $("#name-already-in-use-text").hide();
+    $("#player-not-found-text").hide();
+    $("#signed-up-text").html("Signed up with username: " + data.name);
+    $("#signed-up-text").show();
+    $("#username-signup-input").val("");
+    $("#password-signup-input").val("");
+});
+
+socket.on('player_not_found', function (){
+    $("#username-login-input").val("");
+    $("#password-login-input").val("");
+    $("#name-already-in-use-text").hide();
+    $("#player-not-found-text").show();
+});
+
+socket.on('name_already_in_use', function(){
+    $("#username-signup-input").val("");
+    $("#password-signup-input").val("");
+    $("#player-not-found-text").hide();
+    $("#name-already-in-use-text").show();
+});
 
 Item = function(id,name,x,y){
     var self = {

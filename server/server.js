@@ -71,44 +71,60 @@ function serverHandler (req, res) {
 // Handles connections to the port we are listening to.
 ioServer.sockets.on('connection', function(socket){
     
-	socket.on('player_connect', function(data){
-        //socket.emit('init_game', map, players, items); // Send array with already connected players.
-		console.log('Client connected: ' + data.name + '. With socket id:' + socket.id);
+	socket.on('player_login', function(data){
 
         // Check if player is in DB.
         nPlayer.findOne({ name: data.name }, function(err, oldPlayer) {
           if (err) return console.error(err); // Error handling
-              if(!oldPlayer) { // If not found in DB create new player. (oldPlayer = NULL)
-                  console.log('Player NOT found in DB.'); // For testing only
-                  var newPlayer = new nPlayer({
-                                        name: data.name, 
-                                        x: 900, 
-                                        y: 900, 
-                                        healthPoints: 100, 
-                                        inventory: {item1: 1,  // 1 for starting sword
-                                                    item2: 0, 
-                                                    item3: 0, 
-                                                    item4: 0, 
-                                                    item5: 0 } 
-                    });
+          if(oldPlayer) { // If not found in DB create new player. (oldPlayer = NULL)
 
-                    // Save the new player to db.
-                    newPlayer.save(function (err, newPlayer) {
-                      if (err) return console.error(err); // Error handling
-                      //console.dir(newPlayer); // Prints whats been saved to DB. Remove later.
-                    });
-                    tempPlayer = new Player(socket.id, data.name, newPlayer.x, newPlayer.y);
-                    players[data.name] = tempPlayer; // Adds new player to array
-            
-                } else {
-                    console.log('Player found in DB.'); // For testing only
-                    // Draw the old player
-                    tempPlayer = new Player(socket.id, data.name, oldPlayer.x, oldPlayer.y);
-                    players[data.name] = tempPlayer;
-                }
+                console.log('Player found in DB.'); // For testing only
+                // Draw the old player
+                tempPlayer = new Player(socket.id, data.name, oldPlayer.x, oldPlayer.y);
+                players[data.name] = tempPlayer;
+              
+                console.log('Client connected: ' + data.name + '. With socket id:' + socket.id);
                 socket.emit('init_game', map, players, items, tempPlayer); // Send array with already connected players.
                 socket.broadcast.emit('player_connect', {'name' : data.name, 'x' : data.x, 'y' : data.y}); // Tell other clients of new player.
+                return;
+            }
+            
+            socket.emit('player_not_found');
+
         });
+	});
+    
+    socket.on('player_signup', function(data){
+
+        // Check if player is in DB.
+        nPlayer.findOne({ name: data.name }, function(err, oldPlayer) {
+          if (err) return console.error(err); // Error handling
+          if(!oldPlayer) { // If not found in DB create new player. (oldPlayer = NULL)
+              console.log('Player NOT found in DB.'); // For testing only
+              var newPlayer = new nPlayer({
+                                    name: data.name, 
+                                    x: 900, 
+                                    y: 900, 
+                                    healthPoints: 100, 
+                                    inventory: {item1: 1,  // 1 for starting sword
+                                                item2: 0, 
+                                                item3: 0, 
+                                                item4: 0, 
+                                                item5: 0 } 
+                });
+
+                // Save the new player to db.
+                newPlayer.save(function (err, newPlayer) {
+                  if (err) return console.error(err); // Error handling
+                });
+                
+                socket.emit('player_signed_up', {'name' : newPlayer.name});
+            }else{
+                socket.emit('name_already_in_use');
+            }
+
+        });
+        
 	});
 
     // Handles player disconnects
