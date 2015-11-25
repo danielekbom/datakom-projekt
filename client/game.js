@@ -4,12 +4,12 @@ var canvasWidth = tileSize*30;
 var canvasHeight = tileSize*20;
 
 var lastFrameTimeMs = 0;
-var maxFPS = 50;
+var maxFPS = 60;
 var delta = 0;
-var timestep = 1000 / 50;
+var timestep = 1000 / 60;
 /*************************/
 
-var ctx = null;
+var ctx = null; //canvas context variable
 var player = null;
 var socket = null;
 var map = null;
@@ -32,6 +32,10 @@ Img.player.src = "client/images/player.png";
 Img.swords = new Image();
 Img.swords.src = "client/images/swords.png";
 
+/**
+ * Initialization function
+ *
+ */
 $(document).ready(function(){
     
     var canvas = $('#game-canvas').get(0);
@@ -40,15 +44,19 @@ $(document).ready(function(){
     ctx = canvas.getContext('2d');
     ctx.textAlign="center";
     ctx.font='bold 12px Arial';
-    map = getMap();
+    map = getMap(); //gets the map array form map.js
 
-    var randomName = Math.floor((Math.random() * 1000) + 1);
+    var randomName = Math.floor((Math.random() * 1000) + 1); //player name
     player = new Player("Player " + randomName,900,900,50,50,0.1); 
-    emitConnected();
+    emitConnected(); //send to server
     
     requestAnimationFrame(mainLoop);
 });
 
+/**
+ * function for updating movement of the player.
+ *
+ */
 function update(delta) {
     player.update(delta, map);
     if(player.moveLeft || player.moveUp || player.moveRight || player.moveDown){
@@ -56,6 +64,10 @@ function update(delta) {
     }
 }
 
+/**
+ * Draws the canvas. (Clears it then draws the map then the players)
+ *
+ */
 function draw(){
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     drawMap();
@@ -63,6 +75,11 @@ function draw(){
     drawPlayers();
 }
 
+/**
+ * Draws map
+ * PENDING CHANGE
+ *
+ */
 function drawMap(){
     var tileX = 0;
     var tileY = 0;
@@ -218,7 +235,7 @@ function emitMoved(){
     socket.emit('player_move', { 'name' : player.name , 'x' : player.x , 'y' : player.y, 'direction' : player.direction, 'animationCounter' : player.animationCounter, 'animationCounterWeapon' : player.animationCounterWeapon});
 }
 
-socket = io.connect('http://127.0.0.1:9000');
+socket = io.connect('http://130.238.245.231:9000/');
 
 socket.on('init_players', function (data){
     for (var key in data) {
