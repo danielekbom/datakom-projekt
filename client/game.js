@@ -51,19 +51,10 @@ $(document).ready(function(){
     ctx.font='bold 12px Arial';
     map = getMap();
     
+    //Load sound file with the detected extension
     var sound = new Audio();
-     // Load sound file with the detected extension
-     sound.src = "/client/music/Main.mp3";
-     sound.play();
-
-    var randomName = Math.floor((Math.random() * 1000) + 1); //player name
-    //player = new Player("Player " + randomName,900,900,50,50,0.1); //class in entities.js
-    
-    emitConnected(); //send to server
-    
-    //initGame();
-    
-    //requestAnimationFrame(mainLoop);
+    sound.src = "/client/music/Main.mp3";
+    sound.play();
 });
 
 /**
@@ -279,26 +270,11 @@ function drawItems(){
 }
 
 /**
- * Sends to node that this player wishes to connect.
- * 
- */
-function emitConnected(){
-    //socket.emit('player_connect', { 'name' : player.name , 'x' : player.x, 'y' : player.y });
-}
-
-/**
  * Sends to node that this player whas moved.
  * 
  */
 function emitMoved(){
     socket.emit('player_move', { 'name' : player.name , 'x' : player.x , 'y' : player.y, 'direction' : player.direction, 'animationCounter' : player.animationCounter, 'animationCounterWeapon' : player.animationCounterWeapon});
-}
-
-function initGame(){
-    
-    
-    player.items['sword'] = new Item(123432435, 'sword', 0, 0);
-    player.activeItem = 'sword';
 }
 
 /**
@@ -317,9 +293,12 @@ socket.on('init_game', function (mapFromServer, playerList,itemList, tempPlayer)
         items[key] = itemList[key];
     }
     
+    player.items['sword'] = new Item(123432435, 'sword', 0, 0);
+    player.activeItem = 'sword';
+    
     $("#startpage").hide();
     $("#game-canvas").css({"height": canvasHeight, "width": canvasWidth, "visibility": "visible"});
-    initGame();
+    
     requestAnimationFrame(mainLoop);
 });
 
