@@ -2,7 +2,6 @@
 var http = require('http').createServer(serverHandler);
 var ioServer = require('socket.io').listen(http, { log: false });
 var fs = require('fs');
-var players = {};
 
 http.listen('9000'); // Listen on port 9000.
 
@@ -82,6 +81,10 @@ ioServer.sockets.on('connection', function(socket){
 
 });
 
+
+var players = {};
+var items = [];
+
 /********************* Player class *********************
     ID: socket.id of client
     Name: player name
@@ -100,3 +103,16 @@ Player = function(id,name,x,y){
     self.animationCounterWeapon = 0;
     return self;
 }
+
+/********************* Item class *********************/
+Item = function(id,name,x,y){
+    var self = {
+        id:id,
+        name:name,
+        x:x,
+        y:y
+    };
+    return self;
+}
+
+items.push(new Item(12345,'Axe', 500, 500));
