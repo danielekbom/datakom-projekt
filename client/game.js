@@ -49,7 +49,7 @@ $(document).ready(function(){
     ctx = canvas.getContext('2d');
     ctx.textAlign="center";
     ctx.font='bold 12px Arial';
-    map = getMap(); //gets the map array form map.js
+    map = getMap();
     
     var sound = new Audio();
      // Load sound file with the detected extension
@@ -58,6 +58,7 @@ $(document).ready(function(){
 
     var randomName = Math.floor((Math.random() * 1000) + 1); //player name
     player = new Player("Player " + randomName,900,900,50,50,0.1); //class in entities.js
+    
     emitConnected(); //send to server
     
     initGame();
@@ -294,6 +295,8 @@ function emitMoved(){
 }
 
 function initGame(){
+    
+    
     player.items['sword'] = new Item(123432435, 'sword', 0, 0);
     player.activeItem = 'sword';
 }
@@ -302,7 +305,9 @@ function initGame(){
  * Gets all the other players from the server and places them in the players array.
  * 
  */
-socket.on('init_players', function (playerList,itemList){
+socket.on('init_game', function (mapFromServer, playerList,itemList){
+    //map = mapFromServer;
+    
     for (var key in playerList) {
         if(playerList[key].name == player.name){ continue; }
         players[key] = playerList[key];

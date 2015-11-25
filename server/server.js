@@ -3,6 +3,8 @@ var http = require('http').createServer(serverHandler);
 var ioServer = require('socket.io').listen(http, { log: false });
 var fs = require('fs');
 
+var mapFile = require('./map');
+
 http.listen('9000'); // Listen on port 9000.
 
 var defaultUrl = "/index.html";
@@ -50,7 +52,7 @@ function serverHandler (req, res) {
 ioServer.sockets.on('connection', function(socket){
     
 	socket.on('player_connect', function(data){
-        socket.emit('init_players', players, items); // Send array with already connected players.
+        socket.emit('init_game', map, players, items); // Send array with already connected players.
 		players[data.name] = new Player(socket.id, data.name, data.x, data.y); // Adds new player to array
 		socket.broadcast.emit('player_connect', {'name' : data.name, 'x' : data.x, 'y' : data.y}); // Tell other clients of new player.
 		console.log('Client connected: ' + data.name + '. With socket id:' + socket.id);
@@ -100,6 +102,7 @@ ioServer.sockets.on('connection', function(socket){
 });
 
 
+var map = mapFile.getMap();
 var players = {};
 var items = {};
 
