@@ -130,19 +130,27 @@ ioServer.sockets.on('connection', function(socket){
     // Handles player disconnects
     // Stores players position when player disconnects.
     socket.on('disconnect', function() {
+        //var userFound = null;
         for (key in players){
             if(players[key].id  == socket.id){
                 console.log('Client disconnected: ' + key);
                 // Find the player i database and update his position.
+                
+                nPlayer.update({name:players[key].name}, {$set:{x:players[key].x}});
+                /*
                 nPlayer.findOne({ name: players[key].name }, function(err, discPlayer) {
                     if (err) return console.error(err); // Error handling
-                        if(!discPlayer) { 
-                            console.log('ERROR: Player not found in db while disconnecting.')
-                        } else {
-                            //discPlayer.x = players[key].x;
-                            //discPlayer.y = players[key].y;
-                        }
+                    
+                    if(!discPlayer) { 
+                        console.log('ERROR: Player not found in db while disconnecting.')
+                    } else {
+                        collection.update({name:players[key].name}, {x:players[key].x, y:players[key].y});
+                    }
                 });
+                //if(userFound){
+                    //discPlayer.x = players[key].x;
+                    //discPlayer.y = players[key].y;
+                //}*/
                 socket.broadcast.emit('player_disconnect', {'name' : players[key].name});
                 delete players[key];
             }
