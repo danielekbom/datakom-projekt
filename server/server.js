@@ -22,7 +22,13 @@ var playerSchema = new mongoose.Schema({
   x: Number,
   y: Number,
   healthPoints: Number,
-  inventory: {item1: Number, item2: Number, item3: Number, item4: Number, item5: Number } // ID numbers of items.
+  inventory: {
+      item1: Number, 
+      item2: Number, 
+      item3: Number, 
+      item4: Number, 
+      item5: Number 
+  } // ID numbers of items.
 });
 
 var dbPlayers = mongoose.model('players', playerSchema);
@@ -133,24 +139,15 @@ ioServer.sockets.on('connection', function(socket){
         //var userFound = null;
         for (key in players){
             if(players[key].id  == socket.id){
-                console.log('Client disconnected: ' + key);
-                // Find the player i database and update his position.
                 
-                dbPlayers.update({name:players[key].name}, {$set:{x:players[key].x}});
-                /*
-                nPlayer.findOne({ name: players[key].name }, function(err, discPlayer) {
-                    if (err) return console.error(err); // Error handling
-                    
-                    if(!discPlayer) { 
-                        console.log('ERROR: Player not found in db while disconnecting.')
-                    } else {
-                        collection.update({name:players[key].name}, {x:players[key].x, y:players[key].y});
-                    }
+                console.log("User: " + key + " - Disconnected");
+
+                dbPlayers.findOneAndUpdate({ name: key }, { x: players[key].x, y: players[key].y }, function(err, user) {
+                  if (err) throw err;
+
+                  console.log("User: " + user.name + " - Stored positions in database");
                 });
-                //if(userFound){
-                    //discPlayer.x = players[key].x;
-                    //discPlayer.y = players[key].y;
-                //}*/
+                
                 socket.broadcast.emit('player_disconnect', {'name' : players[key].name});
                 delete players[key];
             }
