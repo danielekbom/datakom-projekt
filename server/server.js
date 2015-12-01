@@ -9,7 +9,7 @@ http.listen('9000'); // Listen on port 9000.
 
 // Setting up mongoDB database using mongoose.
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect('mongodb://localhost/datakom');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'DB connection error:'));
 db.once('open', function (callback) {
@@ -25,7 +25,7 @@ var playerSchema = new mongoose.Schema({
   inventory: {item1: Number, item2: Number, item3: Number, item4: Number, item5: Number } // ID numbers of items.
 });
 
-var nPlayer = mongoose.model('nPlayer', playerSchema);
+var dbPlayers = mongoose.model('players', playerSchema);
 
 var defaultUrl = "/index.html";
 
@@ -74,7 +74,7 @@ ioServer.sockets.on('connection', function(socket){
 	socket.on('player_login', function(data){
 
         // Check if player is in DB.
-        nPlayer.findOne({ name: data.name }, function(err, oldPlayer) {
+        dbPlayers.findOne({ name: data.name }, function(err, oldPlayer) {
           if (err) return console.error(err); // Error handling
           if(oldPlayer) { // If not found in DB create new player. (oldPlayer = NULL)
 
@@ -97,11 +97,11 @@ ioServer.sockets.on('connection', function(socket){
     socket.on('player_signup', function(data){
 
         // Check if player is in DB.
-        nPlayer.findOne({ name: data.name }, function(err, oldPlayer) {
+        dbPlayers.findOne({ name: data.name }, function(err, oldPlayer) {
           if (err) return console.error(err); // Error handling
           if(!oldPlayer) { // If not found in DB create new player. (oldPlayer = NULL)
               console.log('Player NOT found in DB.'); // For testing only
-              var newPlayer = new nPlayer({
+              var newPlayer = new dbPlayers({
                                     name: data.name, 
                                     x: 900, 
                                     y: 900, 
@@ -136,7 +136,7 @@ ioServer.sockets.on('connection', function(socket){
                 console.log('Client disconnected: ' + key);
                 // Find the player i database and update his position.
                 
-                nPlayer.update({name:players[key].name}, {$set:{x:players[key].x}});
+                dbPlayers.update({name:players[key].name}, {$set:{x:players[key].x}});
                 /*
                 nPlayer.findOne({ name: players[key].name }, function(err, discPlayer) {
                     if (err) return console.error(err); // Error handling
