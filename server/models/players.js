@@ -1,10 +1,14 @@
+var dbName = "datakom";
 // Setting up mongoDB database using mongoose.
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/datakom');
+mongoose.connect('mongodb://localhost/' + dbName);
+
 var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'DB connection error:'));
+
+db.on('error', console.error.bind(console, 'Database connection error:'));
+
 db.once('open', function (callback) {
-    console.log("DB connection OK");
+    console.log('Database: ' + dbName + ' - Connected');
 });
 
 // Schema used by mongoose to define items stored in db.
