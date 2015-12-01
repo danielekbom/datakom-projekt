@@ -7,31 +7,7 @@ var mapFile = require('./map');
 
 http.listen('9000'); // Listen on port 9000.
 
-// Setting up mongoDB database using mongoose.
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/datakom');
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'DB connection error:'));
-db.once('open', function (callback) {
-    console.log("DB connection OK");
-});
-
-// Schema used by mongoose to define items stored in db.
-var playerSchema = new mongoose.Schema({
-  name:  { type: String },
-  x: Number,
-  y: Number,
-  healthPoints: Number,
-  inventory: {
-      item1: Number, 
-      item2: Number, 
-      item3: Number, 
-      item4: Number, 
-      item5: Number 
-  } // ID numbers of items.
-});
-
-var dbPlayers = mongoose.model('players', playerSchema);
+var dbPlayers = require('./models/players');
 
 var defaultUrl = "/index.html";
 
@@ -78,25 +54,26 @@ function serverHandler (req, res) {
 ioServer.sockets.on('connection', function(socket){
     
 	socket.on('player_login', function(data){
+        //Find player in database
+        dbPlayers.findOne({ name: data.name }, function(err, foundPlayer) {
+          if (err) return console.error(err);
+            
+          if(foundPlayer) {
 
-        // Check if player is in DB.
-        dbPlayers.findOne({ name: data.name }, function(err, oldPlayer) {
-          if (err) return console.error(err); // Error handling
-          if(oldPlayer) { // If not found in DB create new player. (oldPlayer = NULL)
-
-                console.log('Player found in DB.'); // For testing only
-                // Draw the old player
-                tempPlayer = new Player(socket.id, data.name, oldPlayer.x, oldPlayer.y);
-                players[data.name] = tempPlayer;
+                //Add the player found in the database to the game
+                players[foundPlayer.name] = new Player(socket.id, foundPlayer.name, foundPlayer.x, foundPlayer.y);
               
                 console.log('Client connected: ' + data.name + '. With socket id:' + socket.id);
-                socket.emit('init_game', map, players, items, tempPlayer); // Send array with already connected players.
-                socket.broadcast.emit('player_connect', {'name' : data.name, 'x' : data.x, 'y' : data.y}); // Tell other clients of new player.
+                
+                //Send data needed to initiate the game to the connected player
+                socket.emit('init_game', map, players, items, players[foundPlayer.name]);
+              
+                //Tell all players about the connected player
+                socket.broadcast.emit('player_connect', {'name' : foundPlayer.name, 'x' : foundPlayer.x, 'y' : foundPlayer.y}); // Tell other clients of new player.
                 return;
             }
-            
+            //If player not found tell the user
             socket.emit('player_not_found');
-
         });
 	});
     
@@ -145,7 +122,7 @@ ioServer.sockets.on('connection', function(socket){
                 dbPlayers.findOneAndUpdate({ name: key }, { x: players[key].x, y: players[key].y }, function(err, user) {
                   if (err) throw err;
 
-                  console.log("User: " + user.name + " - Stored positions in database");
+                  console.log("User: " + user.name + " - Positions saved in database");
                 });
                 
                 socket.broadcast.emit('player_disconnect', {'name' : players[key].name});
