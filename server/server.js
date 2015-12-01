@@ -62,6 +62,7 @@ ioServer.sockets.on('connection', function(socket){
           if(foundPlayer) {
                 //Add the player found in the database to the game
                 players[foundPlayer.name] = new Player(socket.id, foundPlayer.name, foundPlayer.x, foundPlayer.y);
+                players[foundPlayer.name].inventory.push(new Item(Math.floor((Math.random() * 1000000) + 1), 'Sword', ItemTypeEnum.WEAPON, 0, 0, 'swords'));
               
                 console.log('User: ' + foundPlayer.name + ' - Connected');
                 
@@ -186,6 +187,12 @@ var items = {};
     x: x-coordinate
     y: y-coordinate
 */
+
+var ItemTypeEnum = {
+  WEAPON: 1,
+  HELTH: 2
+};
+
 Player = function(id,name,x,y){
     var self = {
         id:id,
@@ -197,20 +204,23 @@ Player = function(id,name,x,y){
     self.animationCounter = 0;
     self.animationCounterWeapon = 0;
     self.healthPoints = 100;
+    self.inventory = [];
     return self;
 }
 
 /********************* Item class *********************/
-Item = function(id,name,x,y){
+Item = function(id,name, itemType, x, y, img){
     var self = {
         id:id,
         name:name,
+        itemType:itemType,
         x:x,
-        y:y
+        y:y,
+        img:img
     };
     return self;
 }
 
-items[12345] = new Item(12345,'Axe', 1000, 1000);
-items[12346] = new Item(12346,'Axe', 1500, 1500);
-items[12347] = new Item(12347,'Axe', 800, 800);
+items[12345] = new Item(12345,'Axe', ItemTypeEnum.WEAPON, 1000, 1000, 'axes');
+items[12346] = new Item(12346,'Axe', ItemTypeEnum.WEAPON, 1500, 1500, 'axes');
+items[12347] = new Item(12347,'Axe', ItemTypeEnum.WEAPON, 800, 800, 'axes');

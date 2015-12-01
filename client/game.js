@@ -281,7 +281,7 @@ function emitMoved(){
  * Gets all the other players from the server and places them in the players array.
  * 
  */
-socket.on('init_game', function (mapFromServer, playerList,itemList, tempPlayer){
+socket.on('init_game', function (mapFromServer, playerList, itemList, tempPlayer){
     //map = mapFromServer;
     player = new Player(tempPlayer.name, tempPlayer.x, tempPlayer.y, 50, 50, 0.1);
     
@@ -293,8 +293,8 @@ socket.on('init_game', function (mapFromServer, playerList,itemList, tempPlayer)
         items[key] = itemList[key];
     }
     
-    player.items['sword'] = new Item(123432435, 'sword', 0, 0);
-    player.activeItem = 'sword';
+    player.inventory = tempPlayer.inventory;
+    player.activeWeapon = tempPlayer.inventory[0];
     
     $("#startpage").hide();
     $("#game-canvas").css({"height": canvasHeight, "width": canvasWidth, "visibility": "visible"});
@@ -367,12 +367,20 @@ socket.on('name_already_in_use', function(){
     $("#name-already-in-use-text").show();
 });
 
-Item = function(id,name,x,y){
+var ItemTypeEnum = {
+  WEAPON: 1,
+  HELTH: 2
+};
+
+
+Item = function(id,name,x,y,img){
     var self = {
         id:id,
         name:name,
+        itemType:itemType,
         x:x,
-        y:y
+        y:y,
+        img:img
     };
     return self;
 }

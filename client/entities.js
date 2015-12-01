@@ -27,10 +27,10 @@ Player = function(name,x,y,width,height,velocity){
     //True if player is attacking
     self.attacking = false;
 
-    self.items = {};
+    self.inventory = [];
     
     //the active item of the player
-    self.activeItem = null;
+    self.activeWeapon = null;
     
     //Update loop that updates all game logic, is called from mainLoop.
     //delta is a timestamp used to make all clients synced.
@@ -64,8 +64,7 @@ Player = function(name,x,y,width,height,velocity){
         
         for(key in items){
             if(Math.abs(items[key].x - self.x) < 32 && Math.abs(items[key].y - self.y) < 32){
-                self.items["axe"] = items[key];
-                self.activeItem = "axe";
+                self.inventory.push(items[key]);
                 delete items[key];
             } 
         }
@@ -106,7 +105,7 @@ Player = function(name,x,y,width,height,velocity){
             socket.emit('player_move', { 'name' : self.name , 'x' : self.x , 'y' : self.y, 'direction' : self.direction, 'animationCounter' : self.animationCounter, 'animationCounterWeapon' : self.animationCounterWeapon});
         }
         
-        var weaponImage = self.activeItem == 'axe' ? Img.axes : Img.swords;
+        var weaponImage = Img[self.activeWeapon.img];
         
         //Draw the sword in the correct direction and with the correct sprite using the animationCounterWeapon
         if(self.direction == 1){
@@ -150,10 +149,13 @@ Player = function(name,x,y,width,height,velocity){
     };
     
     self.switchWeapon = function(){
-        if(self.items["axe"] !== undefined){
-            self.activeItem = self.activeItem == "axe" ? "sword" : "axe";
+        if(self.inventory[1] !== undefined){
+            self.activeWeapon = self.activeWeapon.name == "axe" ? self.inventory[0] : self.inventory[1];
         }
-        console.log("fsdfsd");
+        //if(self.items["axe"] !== undefined){
+        //    self.activeItem = self.activeItem == "axe" ? "sword" : "axe";
+        //}
+        //console.log("fsdfsd");
     };
     
     //Return the new player
