@@ -37,11 +37,11 @@ Item.prototype.getItemType = function() {
 };
 
 Item.prototype.getItemImage = function() {
-  return this.image;
+  return this.image.src;
 };
 
 WeaponItem.prototype.getWeaponSprite = function() {
-  return this.WeaponSprite;
+  return this.WeaponSprite.src;
 };
 
 var item = new Item(ItemTypeEnum.WEAPON, "hig");
