@@ -194,6 +194,7 @@ document.onkeydown = function(event){
         case 81:
             event.preventDefault();
             player.switchWeapon();
+            updateInventory();
             break;
     }
 };
@@ -294,13 +295,28 @@ socket.on('init_game', function (mapFromServer, playerList, itemList, tempPlayer
     }
     
     player.inventory = tempPlayer.inventory;
-    player.activeWeapon = 0;//tempPlayer.inventory[0];
+    player.activeWeapon = 0;
     
     $("#startpage").hide();
     $("#game-canvas").css({"height": canvasHeight, "width": canvasWidth, "visibility": "visible"});
+    $("#inventory-div").css({"height": 32, "width": canvasWidth-14, "visibility": "visible"});
+    
+    updateInventory();
     
     requestAnimationFrame(mainLoop);
 });
+
+function updateInventory(){
+    $("#inventory-div").html("");
+    for(i = 0; i < player.inventory.length; i++){
+        if(player.activeWeapon == i){
+            $("#inventory-div").append("<div id='inventory-item-"+i+"' style='width:32px; height:32px; background-repeat: no-repeat; float:left; border:2px solid yellow; position:relative; bottom:2px;'></div>");   
+        }else{
+            $("#inventory-div").append("<div id='inventory-item-"+i+"' style='width:32px; height:32px; background-repeat: no-repeat; float:left;'></div>");
+        }
+        $("#inventory-item-"+i).css("background-image", "url("+Img[player.inventory[i].img].src+")");   
+    } 
+}
 
 /**
  * Gets a newly connected player from the server and places it in the players array.

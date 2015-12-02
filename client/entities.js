@@ -66,7 +66,8 @@ Player = function(name,x,y,width,height,velocity){
             if(Math.abs(items[key].x - self.x) < 32 && Math.abs(items[key].y - self.y) < 32){
                 self.inventory.push(items[key]);
                 delete items[key];
-            } 
+                updateInventory();
+            }
         }
         
         //Increase the animationCounter by 0.1 every time the update function run.
