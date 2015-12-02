@@ -294,7 +294,7 @@ socket.on('init_game', function (mapFromServer, playerList, itemList, tempPlayer
     }
     
     player.inventory = tempPlayer.inventory;
-    player.activeWeapon = tempPlayer.inventory[0];
+    player.activeWeapon = 0;//tempPlayer.inventory[0];
     
     $("#startpage").hide();
     $("#game-canvas").css({"height": canvasHeight, "width": canvasWidth, "visibility": "visible"});

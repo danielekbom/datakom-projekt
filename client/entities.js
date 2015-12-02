@@ -105,7 +105,7 @@ Player = function(name,x,y,width,height,velocity){
             socket.emit('player_move', { 'name' : self.name , 'x' : self.x , 'y' : self.y, 'direction' : self.direction, 'animationCounter' : self.animationCounter, 'animationCounterWeapon' : self.animationCounterWeapon});
         }
         
-        var weaponImage = Img[self.activeWeapon.img];
+        var weaponImage = Img[self.inventory[self.activeWeapon].img];
         
         //Draw the sword in the correct direction and with the correct sprite using the animationCounterWeapon
         if(self.direction == 1){
@@ -149,13 +149,15 @@ Player = function(name,x,y,width,height,velocity){
     };
     
     self.switchWeapon = function(){
-        if(self.inventory[1] !== undefined){
-            self.activeWeapon = self.activeWeapon.name == "axe" ? self.inventory[0] : self.inventory[1];
+        var current = self.activeWeapon;
+        while(true){
+            current++;
+            if(current >= self.inventory.length) current = 0;
+            if(self.inventory[current].itemType == ItemTypeEnum.WEAPON){
+                self.activeWeapon = current;
+                break;
+            }
         }
-        //if(self.items["axe"] !== undefined){
-        //    self.activeItem = self.activeItem == "axe" ? "sword" : "axe";
-        //}
-        //console.log("fsdfsd");
     };
     
     //Return the new player
