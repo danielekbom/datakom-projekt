@@ -231,3 +231,4 @@ Item = function(id,name, itemType, x, y, img){
 items[12345] = new Item(12345,'Axe', ItemTypeEnum.WEAPON, 1000, 1000, 'axes');
 items[12346] = new Item(12346,'Axe', ItemTypeEnum.WEAPON, 1500, 1500, 'axes');
 items[12347] = new Item(12347,'Axe', ItemTypeEnum.WEAPON, 800, 800, 'axes');
+items[12348] = new Item(12348,'Sword2', ItemTypeEnum.WEAPON, 850, 850, 'swords2');

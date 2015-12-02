@@ -34,6 +34,8 @@ Img.player = new Image();
 Img.player.src = "client/images/player.png";
 Img.swords = new Image();
 Img.swords.src = "client/images/swords.png";
+Img.swords2 = new Image();
+Img.swords2.src = "client/images/sword2.png";
 Img.axes = new Image();
 Img.axes.src = "client/images/axe.png";
 
@@ -264,8 +266,11 @@ function drawItems(){
     for(var key in items){
         var xDelta = items[key].x - player.x;
         var yDelta = items[key].y - player.y;
+        
+        var itemImage = Img[items[key].img];
+        
         if(Math.abs(xDelta) < tileSize * 16 && Math.abs(yDelta) < tileSize * 11){
-            ctx.drawImage(Img.axes,0,0,32,32,canvasWidth/2+xDelta,canvasHeight/2+yDelta,32,32);
+            ctx.drawImage(itemImage,0,0,32,32,canvasWidth/2+xDelta,canvasHeight/2+yDelta,32,32);
         }
     }
 }
