@@ -176,6 +176,13 @@ ioServer.sockets.on('connection', function(socket){
 	//}, 60);
 });
 
+//For testing
+function sleep(miliseconds) {
+   var currentTime = new Date().getTime();
+
+   while (currentTime + miliseconds >= new Date().getTime()) {
+   }
+}
 
 var map = mapFile.getMap();
 var players = {};
