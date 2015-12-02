@@ -84,7 +84,7 @@ Player = function(name,x,y,width,height,velocity){
                 self.attacking = false;
             }
             //Send information to the server about the new animation status
-            socket.emit('player_move', { 'name' : self.name , 'x' : self.x , 'y' : self.y, 'direction' : self.direction, 'animationCounter' : self.animationCounter, 'animationCounterWeapon' : self.animationCounterWeapon});
+            socket.emit('player_move', { 'name' : self.name , 'x' : self.x , 'y' : self.y, 'direction' : self.direction, 'animationCounter'                 : self.animationCounter, 'animationCounterWeapon' : self.animationCounterWeapon});
         }
     };
     
@@ -103,7 +103,7 @@ Player = function(name,x,y,width,height,velocity){
             currentSprite = 1;
             self.animationCounter = 1;
             //Send information to the server about the new animation status
-            socket.emit('player_move', { 'name' : self.name , 'x' : self.x , 'y' : self.y, 'direction' : self.direction, 'animationCounter' : self.animationCounter, 'animationCounterWeapon' : self.animationCounterWeapon});
+            socket.emit('player_move', { 'name' : self.name , 'x' : self.x , 'y' : self.y, 'direction' : self.direction, 'animationCounter'                 : self.animationCounter, 'animationCounterWeapon' : self.animationCounterWeapon});
         }
         
         var weaponImage = Img[self.inventory[self.activeWeapon].img];
@@ -122,7 +122,7 @@ Player = function(name,x,y,width,height,velocity){
         //Draw the player using the current sprite and direction
         ctx.drawImage(Img.player,48*currentSprite,52*self.direction,52,52,ctx.canvas.width/2,ctx.canvas.height/2,self.width,self.height);
         
-        //Draw the sword id direction equals to 2
+        //Draw the weapon if direction equals to 2
         if(self.direction == 2){
             ctx.drawImage(weaponImage,32*Math.floor(self.animationCounterWeapon),64,32,32,ctx.canvas.width/2-tileSize+28,ctx.canvas.height/2+10,tileSize,tileSize);
         }
@@ -146,7 +146,7 @@ Player = function(name,x,y,width,height,velocity){
         self.attacking = true;
         self.animationCounterWeapon += 0.3;
         //Send information to the server with the new animation data
-        socket.emit('player_move', { 'name' : self.name , 'x' : self.x , 'y' : self.y, 'direction' : self.direction, 'animationCounter' : self.animationCounter, 'animationCounterWeapon' : self.animationCounterWeapon});
+        socket.emit('player_move', { 'name' : self.name , 'x' : self.x , 'y' : self.y, 'direction' : self.direction, 'animationCounter' :               self.animationCounter, 'animationCounterWeapon' : self.animationCounterWeapon});
     };
     
     self.switchWeapon = function(){
