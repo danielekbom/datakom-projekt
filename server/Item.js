@@ -13,9 +13,13 @@ var WeaponSorts= {
   AXE: 2,
 };
 
-var Item = function(itemType, image) {
+var Item = function(id, itemType, x, y, image) {
+    this.id = id;
+    //this.name = name;
     this.itemType = itemType;
-    this.image = image;
+    this.x = x;
+    this.y = y;
+    this.img = image;
 };
 
 
@@ -23,12 +27,13 @@ Item.prototype.write = function() {
     console.log(this.itemType);
 };
 
-function WeaponItem(weaponSort, WeaponSprite, image) {
-	Item.call(this, ItemTypeEnum.WEAPON, image);
+function WeaponItem(id, itemType, x, y, image, weaponSort, weaponSprite, dmg) {
+	Item.call(this, id, ItemTypeEnum.WEAPON, x, y, image);
 	
-	this.damage = 10;
-    this.WeaponSprite = WeaponSprite;
+    this.weaponSprite = weaponSprite;
 	this.itemSort = weaponSort;
+	this.damage = dmg;
+    
 }
 inheritsFrom(WeaponItem, Item);
 
@@ -37,11 +42,11 @@ Item.prototype.getItemType = function() {
 };
 
 Item.prototype.getItemImage = function() {
-  return this.image.src;
+  return this.img;
 };
 
 WeaponItem.prototype.getWeaponSprite = function() {
-  return this.WeaponSprite.src;
+  return this.weaponSprite;
 };
 
 var item = new Item(ItemTypeEnum.WEAPON, "hig");
