@@ -310,7 +310,7 @@ function updateInventory(){
     $("#inventory-div").html("");
     for(i = 0; i < player.inventory.length; i++){
         if(player.activeWeapon == i){
-            $("#inventory-div").append("<div id='inventory-item-"+i+"' style='width:32px; height:32px; background-repeat: no-repeat; float:left; border:2px solid yellow; position:relative; bottom:2px;'></div>");   
+            $("#inventory-div").append("<div id='inventory-item-"+i+"' style='width:32px; height:32px; background-repeat: no-repeat; float:left; border:2px solid #FFCC66; position:relative; bottom:2px;'></div>");   
         }else{
             $("#inventory-div").append("<div id='inventory-item-"+i+"' style='width:32px; height:32px; background-repeat: no-repeat; float:left;'></div>");
         }
