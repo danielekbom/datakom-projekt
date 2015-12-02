@@ -1,5 +1,6 @@
 var inheritsFrom = function (child, parent) {
     child.prototype = Object.create(parent.prototype);
+	child.prototype.constructor = child;
 };
 
 var ItemTypeEnum = {
@@ -11,15 +12,7 @@ var WeaponSorts= {
   SWORD: 1,
   AXE: 2,
 };
-console.log('Test ' + ItemTypeEnum.WEAPON);
 
-/*var Item = function(itemType, image){
-    var self = {
-        itemType : itemType,
-        imageSource : image
-    };
-    return self;
-};*/
 var Item = function(itemType, image) {
     this.itemType = itemType;
     this.image = image;
@@ -30,16 +23,29 @@ Item.prototype.write = function() {
     console.log(this.itemType);
 };
 
-var WeaponItem = function(weaponSort, image){
-    this.damage = 10;
-    this.itemSort = weaponSort;
-    
-};
+function WeaponItem(weaponSort, WeaponSprite, image) {
+	Item.call(this, ItemTypeEnum.WEAPON, image);
+	
+	this.damage = 10;
+    this.WeaponSprite = WeaponSprite;
+	this.itemSort = weaponSort;
+}
 inheritsFrom(WeaponItem, Item);
+
+Item.prototype.getItemType = function() {
+  console.log("itemType = " + this.itemType);
+};
+
+Item.prototype.getItemImage = function() {
+  return this.image;
+};
+
+WeaponItem.prototype.getWeaponSprite = function() {
+  return this.WeaponSprite;
+};
 
 var item = new Item(ItemTypeEnum.WEAPON, "hig");
 item.write();
-var sword = new WeaponItem(ItemTypeEnum.WEAPON, "hdifhi");
-sword.protype.itemType = ItemTypeEnum.WEAPON;
-//inheritsFrom(sword, new Item(ItemTypeEnum.WEAPON, "image"));
-sword.write();
+var sword = new WeaponItem(WeaponSorts.SWORD, "SwordSprite", "SwordImage");
+console.log(sword.getItemImage());
+console.log(sword.getWeaponSprite());
