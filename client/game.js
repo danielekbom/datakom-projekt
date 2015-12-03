@@ -216,11 +216,11 @@ document.onmousedown = function(mouse){
         var mouseX = mouse.clientX - rect.left;
         var mouseY = mouse.clientY - rect.top;
         
-        var playerXTile = Math.floor((player.x) / 32);
+        var playerXTile = Math.floor((player.x) / 32) - 1;
         var playerYTile = Math.floor((player.y) / 32);
         
-        var clickedTileX = playerXTile + Math.floor((mouseX - (canvasWidth / 2)) / 32);
-        var clickedTileY = playerYTile + Math.floor((mouseY - (canvasHeight / 2)) / 32);
+        var clickedTileX = playerXTile + Math.floor((mouseX - ((canvasWidth) / 2)) / 32);
+        var clickedTileY = playerYTile + Math.floor((mouseY - ((canvasHeight+16) / 2)) / 32);
         
         console.log(mapLayer1[clickedTileY][clickedTileX]);
     }
