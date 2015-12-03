@@ -9,6 +9,7 @@ var delta = 0;
 var timestep = 1000 / 50;
 /*************************/
 
+var canvas = null;
 var ctx = null; //canvas context variable
 var mapCtx = null;
 var player = null;
@@ -50,7 +51,7 @@ Img.axes.src = "client/images/axe.png";
  */
 $(document).ready(function(){
     
-    var canvas = $('#game-canvas').get(0);
+    canvas = $('#game-canvas').get(0);
     
     var mapCanvas = $('#map-canvas').get(0);
     canvas.width = canvasWidth;
@@ -210,8 +211,18 @@ document.onkeyup = function(event){
  * Mouse press action
  */
 document.onmousedown = function(mouse){
-	if(mouse.which === 1){
-	//	player.LeftMouse(mouse);
+	if(mouse.which === 1 && player !== null){
+        var rect = canvas.getBoundingClientRect();
+        var mouseX = mouse.clientX - rect.left;
+        var mouseY = mouse.clientY - rect.top;
+        
+        var playerXTile = Math.floor((player.x) / 32);
+        var playerYTile = Math.floor((player.y) / 32);
+        
+        var clickedTileX = playerXTile + Math.floor((mouseX - (canvasWidth / 2)) / 32);
+        var clickedTileY = playerYTile + Math.floor((mouseY - (canvasHeight / 2)) / 32);
+        
+        console.log(mapLayer1[clickedTileY][clickedTileX]);
     }
 }
 
