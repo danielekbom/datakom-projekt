@@ -10,6 +10,7 @@ var timestep = 1000 / 50;
 /*************************/
 
 var ctx = null; //canvas context variable
+var mapCtx = null;
 var player = null;
 var socket = null;
 var mapLayer1 = null;
@@ -50,9 +51,16 @@ Img.axes.src = "client/images/axe.png";
 $(document).ready(function(){
     
     var canvas = $('#game-canvas').get(0);
+    
+    var mapCanvas = $('#map-canvas').get(0);
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
+    mapCanvas.width = 150;
+    mapCanvas.height = 150;
+    
     ctx = canvas.getContext('2d');
+    mapCtx = mapCanvas.getContext('2d');
+    
     ctx.textAlign="center";
     ctx.font='bold 12px Arial';
     mapLayer1 = getMapLayer1();
@@ -279,9 +287,11 @@ socket.on('init_game', function (mapFromServer, playerList, itemList, tempPlayer
     
     $("#startpage").hide();
     $("#game-canvas").css({"height": canvasHeight, "width": canvasWidth, "visibility": "visible"});
-    $("#inventory-div").css({"height": 32, "width": canvasWidth-14, "visibility": "visible"});
+    $("#map-canvas").css({"height": 150, "width": 150, "visibility": "visible"});
+    $("#inventory-div").css({"height": 68, "width": 140, "visibility": "visible"});
     
     updateInventory();
+    initMiniMap();
     
     requestAnimationFrame(mainLoop);
 });
@@ -290,12 +300,43 @@ function updateInventory(){
     $("#inventory-div").html("");
     for(i = 0; i < player.inventory.length; i++){
         if(player.activeWeapon == i){
-            $("#inventory-div").append("<div id='inventory-item-"+i+"' style='width:32px; height:32px; background-repeat: no-repeat; float:left; border:2px solid #FFCC66; position:relative; bottom:2px;'></div>");   
+            $("#inventory-div").append("<div id='inventory-item-"+i+"' style='width:32px; height:32px; background-repeat: no-repeat; float:left; background-color: #404040; border-radius: 5px;'></div>");   
         }else{
             $("#inventory-div").append("<div id='inventory-item-"+i+"' style='width:32px; height:32px; background-repeat: no-repeat; float:left;'></div>");
         }
         $("#inventory-item-"+i).css("background-image", "url("+Img[player.inventory[i].img].src+")");   
     } 
+}
+
+function initMiniMap(){
+    var mapValue = null;
+    var mapImage = null;
+    
+    var tileX = 0;
+    var tileY = 0;
+    
+    //var restY = player.y % tileSize;
+    //tileY -= restY;
+    for(y = 0; y < mapLayer1.length; y++){
+        //var restX = player.x % tileSize;
+        //tileX -= restX;
+        for(x = 0; x < mapLayer1[0].length; x++){
+            
+            mapValue = mapLayer1[y][x].toString();
+            mapImage = "map"+mapValue.substr(5,4);
+            mapCtx.drawImage(Img[mapImage], mapValue.substr(9,3), mapValue.substr(12,3), 32, 32, tileX, tileY, tileSize/20, tileSize/20);
+
+            mapValue = mapLayer2[y][x].toString();
+            if(mapValue !== "100000000000000"){
+                mapImage = "map"+mapValue.substr(5,4);
+                mapCtx.drawImage(Img[mapImage], mapValue.substr(9,3), mapValue.substr(12,3), 32, 32, tileX, tileY, tileSize/20, tileSize/20);
+            }
+            
+            tileX += tileSize/20;
+        }
+        tileX = 0;
+        tileY += tileSize/20;
+    }
 }
 
 /**

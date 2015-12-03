@@ -230,3 +230,9 @@ Item = function(id,name, itemType, x, y, img){
 
 items[12347] = new Item(12347,'Axe', ItemTypeEnum.WEAPON, 1215, 580, 'axes');
 items[12348] = new Item(12348,'Sword2', ItemTypeEnum.WEAPON, 1716, 792, 'swords2');
+items[12350] = new Item(12350,'Axe', ItemTypeEnum.WEAPON, 675, 1148, 'axes');
+items[12351] = new Item(12351,'Axe', ItemTypeEnum.WEAPON, 680, 1148, 'axes');
+items[12352] = new Item(12352,'Axe', ItemTypeEnum.WEAPON, 685, 1148, 'axes');
+items[12353] = new Item(12353,'Axe', ItemTypeEnum.WEAPON, 690, 1148, 'axes');
+items[12354] = new Item(12354,'Axe', ItemTypeEnum.WEAPON, 670, 1148, 'axes');
+items[12355] = new Item(12355,'Axe', ItemTypeEnum.WEAPON, 665, 1148, 'axes');
