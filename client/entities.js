@@ -34,7 +34,7 @@ Player = function(name,x,y,width,height,velocity){
     
     //Update loop that updates all game logic, is called from mainLoop.
     //delta is a timestamp used to make all clients synced.
-    self.update = function(delta, map){
+    self.update = function(delta){
 
         //The number of pixels to move
         var movement = self.velocity * delta;
@@ -54,7 +54,7 @@ Player = function(name,x,y,width,height,velocity){
         var nextObjectY = Math.floor((nextY+45) / 32) - 1;
         
         //Collision detection. If the next tile is a collision object it is a collision
-        if(map[nextObjectY][nextObjectX].toString().substr(4,1) == 1){
+        if(mapLayer1[nextObjectY][nextObjectX].toString().substr(4,1) == 1 || mapLayer2[nextObjectY][nextObjectX].toString().substr(4,1) == 1){
             //Collision
         }else{
             //Move the player by setting the current position to the next position

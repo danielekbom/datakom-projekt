@@ -12,7 +12,8 @@ var timestep = 1000 / 50;
 var ctx = null; //canvas context variable
 var player = null;
 var socket = null;
-var map = null;
+var mapLayer1 = null;
+var mapLayer2 = null;
 
 socket = io.connect('http://127.0.0.1:9000/');
 
@@ -52,7 +53,8 @@ $(document).ready(function(){
     ctx = canvas.getContext('2d');
     ctx.textAlign="center";
     ctx.font='bold 12px Arial';
-    map = getMap();
+    mapLayer1 = getMapLayer1();
+    mapLayer2 = getMapLayer2();
     
     //Load sound file with the detected extension
     var sound = new Audio();
@@ -65,7 +67,7 @@ $(document).ready(function(){
  *
  */
 function update(delta) {
-    player.update(delta, map);
+    player.update(delta);
     if(player.moveLeft || player.moveUp || player.moveRight || player.moveDown){
         emitMoved();
     }
@@ -97,10 +99,16 @@ function drawMap(){
         tileX -= restX;
         for(x = Math.floor(player.x / tileSize - 16); x < Math.floor(player.x / tileSize + 16); x++){
             
-            mapValue = map[y][x].toString();
+            mapValue = mapLayer1[y][x].toString();
             mapImage = "map"+mapValue.substr(5,4);
             ctx.drawImage(Img[mapImage], mapValue.substr(9,3), mapValue.substr(12,3), 32, 32, tileX, tileY, tileSize, tileSize);
 
+            mapValue = mapLayer2[y][x].toString();
+            if(mapValue !== "100000000000000"){
+                mapImage = "map"+mapValue.substr(5,4);
+                ctx.drawImage(Img[mapImage], mapValue.substr(9,3), mapValue.substr(12,3), 32, 32, tileX, tileY, tileSize, tileSize);
+            }
+            
             tileX += tileSize;
         }
         tileX = 0;
