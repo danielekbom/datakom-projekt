@@ -54,7 +54,7 @@ Player = function(name,x,y,width,height,velocity){
         var nextObjectY = Math.floor((nextY+45) / 32) - 1;
         
         //Collision detection. If the next tile is a collision object it is a collision
-        if(map[nextObjectY][nextObjectX] >= 1000){
+        if(map[nextObjectY][nextObjectX].toString().substr(4,1) == 1){
             //Collision
         }else{
             //Move the player by setting the current position to the next position

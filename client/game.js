@@ -20,16 +20,17 @@ var players = {};
 var items = {};
 
 var Img = {};
-Img.ground1 = new Image();
-Img.ground1.src = "client/images/ground_tiles.png";
-Img.ground2 = new Image();
-Img.ground2.src = "client/images/graphics-tiles-waterflow.png";
-Img.ground3 = new Image();
-Img.ground3.src = "client/images/beach_sand_woa.png";
-Img.water1 = new Image();
-Img.water1.src = "client/images/beach_sand_woa3.png";
-Img.objects1 = new Image();
-Img.objects1.src = "client/images/object-layer.png";
+Img.map0001 = new Image();
+Img.map0001.src = "client/images/ground_tiles.png";
+Img.map0002 = new Image();
+Img.map0002.src = "client/images/graphics-tiles-waterflow.png";
+Img.map0003 = new Image();
+Img.map0003.src = "client/images/beach_sand_woa.png";
+Img.map0004 = new Image();
+Img.map0004.src = "client/images/beach_sand_woa3.png";
+Img.map0005 = new Image();
+Img.map0005.src = "client/images/object-layer.png";
+
 Img.player = new Image();
 Img.player.src = "client/images/player.png";
 Img.swords = new Image();
@@ -82,12 +83,10 @@ function draw(){
     drawItems();
 }
 
-/**
- * Draws map
- * PENDING CHANGE
- *
- */
 function drawMap(){
+    var mapValue = null;
+    var mapImage = null;
+    
     var tileX = 0;
     var tileY = 0;
     
@@ -97,45 +96,11 @@ function drawMap(){
         var restX = player.x % tileSize;
         tileX -= restX;
         for(x = Math.floor(player.x / tileSize - 16); x < Math.floor(player.x / tileSize + 16); x++){
-            if(map[y][x] == 0) ctx.drawImage(Img.ground1,32,64,64,64,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 1) ctx.drawImage(Img.water1,0,448,16,32,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 3) ctx.drawImage(Img.ground1,32,160,96,96,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 4) ctx.drawImage(Img.ground1,256,160,32,32,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 5) ctx.drawImage(Img.ground1,288,160,32,32,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 6) ctx.drawImage(Img.ground1,224,192,32,32,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 7) ctx.drawImage(Img.ground1,224,128,32,32,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 8) ctx.drawImage(Img.ground1,288,192,32,32,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 9) ctx.drawImage(Img.ground1,192,160,32,32,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 10) ctx.drawImage(Img.ground1,320,160,32,32,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 11) ctx.drawImage(Img.ground1,320,192,32,32,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 10012) ctx.drawImage(Img.ground1,416,256,32,32,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 10013) ctx.drawImage(Img.ground1,448,292,32,32,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 14) ctx.drawImage(Img.ground1,448,160,32,32,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 15) ctx.drawImage(Img.ground1,512,160,32,32,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 16) ctx.drawImage(Img.ground1,416,128,32,32,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 10017) ctx.drawImage(Img.water1,32,320,32,32,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 18) ctx.drawImage(Img.ground1,416,192,32,32,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 10019) ctx.drawImage(Img.ground1,416,320,32,32,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 20) ctx.drawImage(Img.ground1,512,192,32,32,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 10021) ctx.drawImage(Img.water1,32,256,32,32,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 10022) ctx.drawImage(Img.ground1,384,288,32,32,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 23) ctx.drawImage(Img.ground1,384,160,32,32,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 24) ctx.drawImage(Img.ground1,480,192,32,32,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 10025) ctx.drawImage(Img.water1,32,288,32,32,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 26) ctx.drawImage(Img.ground1,480,160,32,32,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 10027) ctx.drawImage(Img.ground1,448,256,32,32,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 10028) ctx.drawImage(Img.water1,32,352,32,32,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 10029) ctx.drawImage(Img.ground1,384,256,32,32,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 10030) ctx.drawImage(Img.ground1,448,320,32,32,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 10031) ctx.drawImage(Img.ground1,384,320,32,32,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 32) ctx.drawImage(Img.ground1,384,128,32,32,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 33) ctx.drawImage(Img.ground1,448,128,32,32,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 34) ctx.drawImage(Img.ground1,384,192,32,32,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 35) ctx.drawImage(Img.ground1,448,192,32,32,tileX,tileY,tileSize,tileSize);
-            else if(map[y][x] == 10000){
-                ctx.drawImage(Img.ground1,32,64,64,64,tileX,tileY,tileSize,tileSize);
-                ctx.drawImage(Img.objects1,160,70,64,64,tileX,tileY,tileSize,tileSize);
-            }
+            
+            mapValue = map[y][x].toString();
+            mapImage = "map"+mapValue.substr(5,4);
+            ctx.drawImage(Img[mapImage], mapValue.substr(9,3), mapValue.substr(12,3), 32, 32, tileX, tileY, tileSize, tileSize);
+
             tileX += tileSize;
         }
         tileX = 0;
