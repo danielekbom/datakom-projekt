@@ -228,5 +228,5 @@ Item = function(id,name, itemType, x, y, img){
     return self;
 }
 
-items[12347] = new Item(12347,'Axe', ItemTypeEnum.WEAPON, 675, 1155, 'axes');
-items[12348] = new Item(12348,'Sword2', ItemTypeEnum.WEAPON, 1215, 580, 'swords2');
+items[12347] = new Item(12347,'Axe', ItemTypeEnum.WEAPON, 1215, 580, 'axes');
+items[12348] = new Item(12348,'Sword2', ItemTypeEnum.WEAPON, 1716, 792, 'swords2');
