@@ -31,6 +31,8 @@ Img.map0004 = new Image();
 Img.map0004.src = "client/images/beach_sand_woa3.png";
 Img.map0005 = new Image();
 Img.map0005.src = "client/images/object-layer.png";
+Img.map0006 = new Image();
+Img.map0006.src = "client/images/Cliff_tileset.png";
 
 Img.player = new Image();
 Img.player.src = "client/images/player.png";
