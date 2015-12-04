@@ -211,16 +211,17 @@ document.onkeyup = function(event){
  * Mouse press action
  */
 document.onmousedown = function(mouse){
+    //Function to get map value when clicking on a tile
 	if(mouse.which === 1 && player !== null){
         var rect = canvas.getBoundingClientRect();
         var mouseX = mouse.clientX - rect.left;
         var mouseY = mouse.clientY - rect.top;
         
-        var playerXTile = Math.floor((player.x) / 32) - 1;
-        var playerYTile = Math.floor((player.y) / 32);
+        var playerXTile = player.x / 32 - 1;
+        var playerYTile = player.y / 32 - 1;
         
-        var clickedTileX = playerXTile + Math.floor((mouseX - ((canvasWidth) / 2)) / 32);
-        var clickedTileY = playerYTile + Math.floor((mouseY - ((canvasHeight+16) / 2)) / 32);
+        var clickedTileX = Math.floor(playerXTile + (mouseX - (canvasWidth / 2)) / 32);
+        var clickedTileY = Math.floor(playerYTile + (mouseY - (canvasHeight / 2)) / 32);
         
         console.log(mapLayer1[clickedTileY][clickedTileX]);
     }
@@ -326,27 +327,24 @@ function initMiniMap(){
     var tileX = 0;
     var tileY = 0;
     
-    //var restY = player.y % tileSize;
-    //tileY -= restY;
     for(y = 0; y < mapLayer1.length; y++){
-        //var restX = player.x % tileSize;
-        //tileX -= restX;
+
         for(x = 0; x < mapLayer1[0].length; x++){
             
             mapValue = mapLayer1[y][x].toString();
             mapImage = "map"+mapValue.substr(5,4);
-            mapCtx.drawImage(Img[mapImage], mapValue.substr(9,3), mapValue.substr(12,3), 32, 32, tileX, tileY, tileSize/20, tileSize/20);
+            mapCtx.drawImage(Img[mapImage], mapValue.substr(9,3), mapValue.substr(12,3), 32, 32, tileX, tileY, tileSize/30, tileSize/30);
 
             mapValue = mapLayer2[y][x].toString();
             if(mapValue !== "100000000000000"){
                 mapImage = "map"+mapValue.substr(5,4);
-                mapCtx.drawImage(Img[mapImage], mapValue.substr(9,3), mapValue.substr(12,3), 32, 32, tileX, tileY, tileSize/20, tileSize/20);
+                mapCtx.drawImage(Img[mapImage], mapValue.substr(9,3), mapValue.substr(12,3), 32, 32, tileX, tileY, tileSize/30, tileSize/30);
             }
             
-            tileX += tileSize/20;
+            tileX += tileSize/30;
         }
         tileX = 0;
-        tileY += tileSize/20;
+        tileY += tileSize/30;
     }
 }
 
