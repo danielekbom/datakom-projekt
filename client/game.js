@@ -333,6 +333,9 @@ function initMiniMap(){
             
             mapValue = mapLayer1[y][x].toString();
             mapImage = "map"+mapValue.substr(5,4);
+            
+            if(Img[mapImage] == undefined) console.log(mapValue);
+
             mapCtx.drawImage(Img[mapImage], mapValue.substr(9,3), mapValue.substr(12,3), 32, 32, tileX, tileY, tileSize/30, tileSize/30);
 
             mapValue = mapLayer2[y][x].toString();
