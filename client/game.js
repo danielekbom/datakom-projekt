@@ -336,18 +336,18 @@ function initMiniMap(){
             
             if(Img[mapImage] == undefined) console.log(mapValue);
 
-            mapCtx.drawImage(Img[mapImage], mapValue.substr(9,3), mapValue.substr(12,3), 32, 32, tileX, tileY, tileSize/30, tileSize/30);
+            mapCtx.drawImage(Img[mapImage], mapValue.substr(9,3), mapValue.substr(12,3), 32, 32, tileX, tileY, tileSize/35, tileSize/35);
 
             mapValue = mapLayer2[y][x].toString();
             if(mapValue !== "100000000000000"){
                 mapImage = "map"+mapValue.substr(5,4);
-                mapCtx.drawImage(Img[mapImage], mapValue.substr(9,3), mapValue.substr(12,3), 32, 32, tileX, tileY, tileSize/30, tileSize/30);
+                mapCtx.drawImage(Img[mapImage], mapValue.substr(9,3), mapValue.substr(12,3), 32, 32, tileX, tileY, tileSize/35, tileSize/35);
             }
             
-            tileX += tileSize/30;
+            tileX += tileSize/35;
         }
         tileX = 0;
-        tileY += tileSize/30;
+        tileY += tileSize/35;
     }
 }
 
