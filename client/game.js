@@ -59,7 +59,7 @@ $(document).ready(function(){
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
     mapCanvas.width = 138;
-    mapCanvas.height = 150;
+    mapCanvas.height = 138;
     
     ctx = canvas.getContext('2d');
     mapCtx = mapCanvas.getContext('2d');
@@ -301,7 +301,7 @@ socket.on('init_game', function (mapFromServer, playerList, itemList, tempPlayer
     
     $("#startpage").hide();
     $("#game-canvas").css({"height": canvasHeight, "width": canvasWidth, "visibility": "visible"});
-    $("#map-canvas").css({"height": 150, "width": 138, "visibility": "visible"});
+    $("#map-canvas").css({"height": 138, "width": 138, "visibility": "visible"});
     $("#inventory-div").css({"height": 68, "width": 128, "visibility": "visible"});
     
     updateInventory();
