@@ -4,6 +4,7 @@ var ioServer = require('socket.io').listen(http, { log: false });
 var fs = require('fs');
 
 var mapFile = require('./map');
+var itemFile = require('./Item')
 
 http.listen('9000'); // Listen on port 9000.
 
@@ -62,7 +63,7 @@ ioServer.sockets.on('connection', function(socket){
           if(foundPlayer) {
                 //Add the player found in the database to the game
                 players[foundPlayer.name] = new Player(socket.id, foundPlayer.name, foundPlayer.x, foundPlayer.y);
-                players[foundPlayer.name].inventory.push(new Item(Math.floor((Math.random() * 1000000) + 1), 'Sword', ItemTypeEnum.WEAPON, 0, 0, 'swords'));
+                //players[foundPlayer.name].inventory.push(new WeaponItem(itemName.SWORD, 0, 0));
               
                 console.log('User: ' + foundPlayer.name + ' - Connected');
                 
@@ -228,11 +229,11 @@ Item = function(id,name, itemType, x, y, img){
     return self;
 }
 
-items[12347] = new Item(12347,'Axe', ItemTypeEnum.WEAPON, 1868, 594, 'axes');
-items[12348] = new Item(12348,'Sword2', ItemTypeEnum.WEAPON, 2358, 788, 'swords2');
-items[12350] = new Item(12350,'Axe', ItemTypeEnum.WEAPON, 1768, 1148, 'axes');
-items[12351] = new Item(12351,'Axe', ItemTypeEnum.WEAPON, 1768, 1148, 'axes');
-items[12352] = new Item(12352,'Axe', ItemTypeEnum.WEAPON, 1768, 1148, 'axes');
-items[12353] = new Item(12353,'Axe', ItemTypeEnum.WEAPON, 1768, 1148, 'axes');
-items[12354] = new Item(12354,'Axe', ItemTypeEnum.WEAPON, 1768, 1148, 'axes');
-items[12355] = new Item(12355,'Axe', ItemTypeEnum.WEAPON, 1768, 1148, 'axes');
+items[12347] = new Item(12347,'axe', ItemTypeEnum.WEAPON, 1868, 594, 'axes');
+items[12348] = new Item(12348,'scimitar', ItemTypeEnum.WEAPON, 2358, 788, 'swords2');
+items[12350] = new Item(12350,'axe', ItemTypeEnum.WEAPON, 1768, 1148, 'axes');
+items[12351] = new Item(12351,'axe', ItemTypeEnum.WEAPON, 1768, 1148, 'axes');
+items[12352] = new Item(12352,'axe', ItemTypeEnum.WEAPON, 1768, 1148, 'axes');
+items[12353] = new Item(12353,'axe', ItemTypeEnum.WEAPON, 1768, 1148, 'axes');
+items[12354] = new Item(12354,'axe', ItemTypeEnum.WEAPON, 1768, 1148, 'axes');
+items[12355] = new Item(12355,'axe', ItemTypeEnum.WEAPON, 1768, 1148, 'axes');
