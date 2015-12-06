@@ -17,7 +17,7 @@ var socket = null;
 var mapLayer1 = null;
 var mapLayer2 = null;
 
-socket = io.connect('http://192.168.0.3:9000/');
+socket = io.connect('http://127.0.0.1:9000/');
 
 var players = {};
 var items = {};
@@ -40,12 +40,16 @@ Img.map0007.src = "client/images/mountain_landscape.png";
 
 Img.player = new Image();
 Img.player.src = "client/images/player.png";
-Img.swords = new Image();
-Img.swords.src = "client/images/swords.png";
-Img.swords2 = new Image();
-Img.swords2.src = "client/images/sword2.png";
-Img.axes = new Image();
-Img.axes.src = "client/images/axe.png";
+Img.sword = new Image();
+Img.sword.src = "client/images/sword.png";
+Img.scimitar = new Image();
+Img.scimitar.src = "client/images/scimitar.png";
+Img.axe = new Image();
+Img.axe.src = "client/images/axe.png";
+
+Item.prototype.returnImg = function() {
+	return Img.(this.getItemImage());
+}
 
 /**
  * Initialization function
@@ -312,7 +316,7 @@ socket.on('init_game', function (mapFromServer, playerList, itemList, tempPlayer
 
 function updateInventory(){
     $("#inventory-div").html("");
-    for(i = 0; i < player.inventory.length; i++){
+    for(var i = 0, len = player.inventory.length; i < len; i++){
         if(player.activeWeapon == i){
             $("#inventory-div").append("<div id='inventory-item-"+i+"' style='width:32px; height:32px; background-repeat: no-repeat; float:left; background-color: #404040; border-radius: 5px;'></div>");   
         }else{
