@@ -62,7 +62,7 @@ ioServer.sockets.on('connection', function(socket){
           if(foundPlayer) {
                 //Add the player found in the database to the game
                 players[foundPlayer.name] = new Player(socket.id, foundPlayer.name, foundPlayer.x, foundPlayer.y);
-                players[foundPlayer.name].inventory.push(new Item(Math.floor((Math.random() * 1000000) + 1), 'Sword', ItemTypeEnum.WEAPON, 0, 0, 'swords'));
+                players[foundPlayer.name].inventory.push(new Item(Math.floor((Math.random() * 1000000) + 1), 'Sword', ItemTypeEnum.WEAPON, 0, 0, 'sword'));
               
                 console.log('User: ' + foundPlayer.name + ' - Connected');
                 
@@ -228,11 +228,11 @@ Item = function(id,name, itemType, x, y, img){
     return self;
 }
 
-items[12347] = new Item(12347,'Axe', ItemTypeEnum.WEAPON, 1868, 594, 'axes');
-items[12348] = new Item(12348,'Sword2', ItemTypeEnum.WEAPON, 2358, 788, 'swords2');
-items[12350] = new Item(12350,'Axe', ItemTypeEnum.WEAPON, 1768, 1148, 'axes');
-items[12351] = new Item(12351,'Axe', ItemTypeEnum.WEAPON, 1768, 1148, 'axes');
-items[12352] = new Item(12352,'Axe', ItemTypeEnum.WEAPON, 1768, 1148, 'axes');
-items[12353] = new Item(12353,'Axe', ItemTypeEnum.WEAPON, 1768, 1148, 'axes');
-items[12354] = new Item(12354,'Axe', ItemTypeEnum.WEAPON, 1768, 1148, 'axes');
-items[12355] = new Item(12355,'Axe', ItemTypeEnum.WEAPON, 1768, 1148, 'axes');
+items[12347] = new Item(12347,'Axe', ItemTypeEnum.WEAPON, 1868, 594, 'axe');
+items[12348] = new Item(12348,'Scimitar', ItemTypeEnum.WEAPON, 2358, 788, 'scimitar');
+items[12350] = new Item(12350,'Axe', ItemTypeEnum.WEAPON, 1768, 1148, 'axe');
+items[12351] = new Item(12351,'Axe', ItemTypeEnum.WEAPON, 1768, 1148, 'axe');
+items[12352] = new Item(12352,'Axe', ItemTypeEnum.WEAPON, 1768, 1148, 'axe');
+items[12353] = new Item(12353,'Axe', ItemTypeEnum.WEAPON, 1768, 1148, 'axe');
+items[12354] = new Item(12354,'Axe', ItemTypeEnum.WEAPON, 1768, 1148, 'axe');
+items[12355] = new Item(12355,'Axe', ItemTypeEnum.WEAPON, 1768, 1148, 'axe');

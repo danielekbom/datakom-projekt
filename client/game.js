@@ -47,10 +47,6 @@ Img.scimitar.src = "client/images/scimitar.png";
 Img.axe = new Image();
 Img.axe.src = "client/images/axe.png";
 
-Item.prototype.returnImg = function() {
-	return Img.(this.getItemImage());
-}
-
 /**
  * Initialization function
  *
