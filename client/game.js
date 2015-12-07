@@ -47,6 +47,9 @@ Img.scimitar.src = "client/images/scimitar.png";
 Img.axe = new Image();
 Img.axe.src = "client/images/axe.png";
 
+Img.hp100 = new Image();
+Img.hp100.src = "client/images/hp100.png";
+
 /**
  * Initialization function
  *
@@ -244,16 +247,16 @@ function drawPlayers(){
             if(players[key].direction == 1){
                 ctx.drawImage(Img.swords,32*Math.floor(players[key].animationCounterWeapon),0,32,32,canvasWidth/2+xDelta+tileSize-10,canvasHeight/2+yDelta+5,tileSize,tileSize);
             }else if(players[key].direction == 3){
-                ctx.drawImage(Img.swords,32*Math.floor(players[key].animationCounterWeapon),32,32,32,canvasWidth/2+xDelta-tileSize+25,canvasHeight/2+yDelta+8,tileSize,tileSize);
+                ctx.drawImage(Img.sword,32*Math.floor(players[key].animationCounterWeapon),32,32,32,canvasWidth/2+xDelta-tileSize+25,canvasHeight/2+yDelta+8,tileSize,tileSize);
             }else if(players[key].direction == 0){
-                ctx.drawImage(Img.swords,32*Math.floor(players[key].animationCounterWeapon),64,32,32,canvasWidth/2+xDelta+tileSize-12,canvasHeight/2+yDelta+4,tileSize,tileSize);
+                ctx.drawImage(Img.sword,32*Math.floor(players[key].animationCounterWeapon),64,32,32,canvasWidth/2+xDelta+tileSize-12,canvasHeight/2+yDelta+4,tileSize,tileSize);
             }
             
             ctx.fillText(players[key].name,canvasWidth/2+xDelta+22, canvasHeight/2+yDelta-8);
             ctx.drawImage(Img.player,48*currentSprite,52*players[key].direction,52,52,canvasWidth/2+xDelta,canvasHeight/2+yDelta,50,50);
             
             if(players[key].direction == 2){
-                ctx.drawImage(Img.swords,32*Math.floor(players[key].animationCounterWeapon),64,32,32,canvasWidth/2+xDelta-tileSize+28,canvasHeight/2+yDelta+10,tileSize,tileSize);
+                ctx.drawImage(Img.sword,32*Math.floor(players[key].animationCounterWeapon),64,32,32,canvasWidth/2+xDelta-tileSize+28,canvasHeight/2+yDelta+10,tileSize,tileSize);
             }
         }
     }
@@ -424,15 +427,26 @@ var ItemTypeEnum = {
 };
 
 
-Item = function(id,name,x,y,img){
-    var self = {
-        id:id,
-        name:name,
-        itemType:itemType,
-        x:x,
-        y:y,
-        img:img
-    };
-    return self;
+function WeaponItem(id,name,itemType, img, x, y, dmg){
+    this.id = id;
+    this.name = name;
+    this.itemType = ItemTypeEnum.WEAPON;
+	this.x = x;
+	this.y = y;
+    this.img = img;
+	this.dmg = dmg;
+}
+
+function DrinkItem(id,name,itemType, img, x, y, amount){
+    this.id = id;
+    this.name = name;
+    this.itemType = ItemTypeEnum.DRINK;
+	this.x = x;
+	this.y = y;
+    this.img = img;
+	this.amount = amount;
 }
     
+function getItemImage(item) {
+	return Img[item.img];
+}

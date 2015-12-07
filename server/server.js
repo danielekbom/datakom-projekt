@@ -62,7 +62,7 @@ ioServer.sockets.on('connection', function(socket){
           if(foundPlayer) {
                 //Add the player found in the database to the game
                 players[foundPlayer.name] = new Player(socket.id, foundPlayer.name, foundPlayer.x, foundPlayer.y);
-                players[foundPlayer.name].inventory.push(new Item(Math.floor((Math.random() * 1000000) + 1), 'Sword', ItemTypeEnum.WEAPON, 0, 0, 'sword'));
+                players[foundPlayer.name].inventory.push(createItem(ItemProperties.SWORD, 0, 0));
               
                 console.log('User: ' + foundPlayer.name + ' - Connected');
                 
@@ -88,7 +88,7 @@ ioServer.sockets.on('connection', function(socket){
               //Create the new player
               var newPlayer = new dbPlayers({
                                     name: data.name, 
-                                    x: 900, 
+                                    x: 1340, 
                                     y: 900, 
                                     healthPoints: 100, 
                                     inventory: {
@@ -186,7 +186,7 @@ function sleep(miliseconds) {
 
 var map = mapFile.getMap();
 var players = {};
-var items = {};
+var items = [];
 
 /********************* Player class *********************
     ID: socket.id of client
@@ -194,11 +194,6 @@ var items = {};
     x: x-coordinate
     y: y-coordinate
 */
-
-var ItemTypeEnum = {
-  WEAPON: 1,
-  HELTH: 2
-};
 
 Player = function(id,name,x,y){
     var self = {
@@ -216,23 +211,88 @@ Player = function(id,name,x,y){
 }
 
 /********************* Item class *********************/
-Item = function(id,name, itemType, x, y, img){
-    var self = {
-        id:id,
-        name:name,
-        itemType:itemType,
-        x:x,
-        y:y,
-        img:img
-    };
-    return self;
+var itemId = 0; //item ids, every time an item is created it gets a new id
+function returnNextId() {
+	itemId ++;
+	return itemId;
+}
+//utility functions **
+var ItemTypeEnum = {
+	WEAPON: 1,
+	DRINK: 2,
+};
+
+/* ItemName, every sort of item that can be created must have an ItemName.
+ * the actual name should be the same 
+ */
+var ItemProperties= {
+	//weapons [name, ItemTypeEnum.WEAPON, img, rarity, damage]
+	SWORD: ['sword', ItemTypeEnum.WEAPON, 'sword', 100, 10],
+	AXE: ['axe', ItemTypeEnum.WEAPON, 'axe', 50, 12],
+	SCIMITAR: ['scimitar', ItemTypeEnum.WEAPON, 'scimitar', 10, 17],
+	//health [name, ItemTypeEnum.DRINK, img, rarity, +hp]
+	HP100: ['hp100', ItemTypeEnum.DRINK, 'hp100', 20, 100],
+	
+};
+
+var summedRarity = 0;
+for(var key in ItemProperties) {
+	summedRarity += ItemProperties[key][3];
+	ItemProperties[key][3] = summedRarity;
 }
 
-items[12347] = new Item(12347,'Axe', ItemTypeEnum.WEAPON, 1868, 594, 'axe');
-items[12348] = new Item(12348,'Scimitar', ItemTypeEnum.WEAPON, 2358, 788, 'scimitar');
-items[12350] = new Item(12350,'Axe', ItemTypeEnum.WEAPON, 1768, 1148, 'axe');
-items[12351] = new Item(12351,'Axe', ItemTypeEnum.WEAPON, 1768, 1148, 'axe');
-items[12352] = new Item(12352,'Axe', ItemTypeEnum.WEAPON, 1768, 1148, 'axe');
-items[12353] = new Item(12353,'Axe', ItemTypeEnum.WEAPON, 1768, 1148, 'axe');
-items[12354] = new Item(12354,'Axe', ItemTypeEnum.WEAPON, 1768, 1148, 'axe');
-items[12355] = new Item(12355,'Axe', ItemTypeEnum.WEAPON, 1768, 1148, 'axe');
+function WeaponItem(id,name,itemType, img, x, y, dmg){
+    this.id = id;
+    this.name = name;
+    this.itemType = ItemTypeEnum.WEAPON;
+	this.x = x;
+	this.y = y;
+    this.img = img;
+	this.dmg = dmg;
+}
+
+function DrinkItem(id,name,itemType, img, x, y, amount){
+    this.id = id;
+    this.name = name;
+    this.itemType = ItemTypeEnum.DRINK;
+	this.x = x;
+	this.y = y;
+    this.img = img;
+	this.amount = amount;
+}
+
+
+function createItem(itemProperties, x, y) {
+	if(itemProperties[1] === ItemTypeEnum.WEAPON) {
+		return new WeaponItem(returnNextId(), itemProperties[0], itemProperties[1], itemProperties[2], x, y, itemProperties[4]);
+	} else if(itemProperties[1] === ItemTypeEnum.DRINK) {
+		return new DrinkItem(returnNextId(), itemProperties[0], itemProperties[1], itemProperties[2], x, y, itemProperties[4]);
+	}
+	
+}
+
+var keys = Object.keys(ItemProperties);
+var k_len = keys.length;
+function spawnRandomItem(x, y) {
+	//Item name should be same as image variable name.
+    var itemProperties;
+	var itemToSpawn = Math.floor((Math.random() * summedRarity) + 1);
+    
+	for(var i = 0; i < k_len; i++) {
+        itemProperties = ItemProperties[keys[i]];
+		if(itemToSpawn <= itemProperties[2]) {
+			break;
+		}
+	}
+	return createItem(itemProperties, x, y);
+	var returnItem;
+}
+
+items.push(createItem(ItemProperties.AXE, 1868, 594));
+items.push(createItem(ItemProperties.SCIMITAR, 2358, 788));
+items.push(createItem(ItemProperties.HP100, 2558, 800));
+items.push(spawnRandomItem(1024, 129));
+items.push(spawnRandomItem(1230, 1000));
+items.push(spawnRandomItem(3500, 1377));
+items.push(spawnRandomItem(125, 2000));
+

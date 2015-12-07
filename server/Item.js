@@ -1,8 +1,3 @@
-//utility functions **
-var inheritsFrom = function (child, parent) {
-    child.prototype = Object.create(parent.prototype);
-	child.prototype.constructor = child;
-};
 var itemId = 0; //item ids, every time an item is created it gets a new id
 function returnNextId() {
 	itemId ++;
@@ -11,81 +6,71 @@ function returnNextId() {
 //utility functions **
 var ItemTypeEnum = {
 	WEAPON: 1,
-	HEALTH: 2,
+	DRINK: 2,
 };
 
 /* ItemName, every sort of item that can be created must have an ItemName.
  * the actual name should be the same 
  */
-var ItemName= {
-	//weapons [name, ItemTypeEnum.WEAPON, rarity, damage]
-	SWORD: ['sword', ItemTypeEnum.WEAPON, 100, 10],
-	AXE: ['axe', ItemTypeEnum.WEAPON, 50, 12],
-	SCIMITAR: ['scimitar', ItemTypeEnum.WEAPON, 10, 17],
-	//health [name, ItemTypeEnum.HEALTH, rarity, +hp]
+var ItemProperties= {
+	//weapons [name, ItemTypeEnum.WEAPON, img, rarity, damage]
+	SWORD: ['sword', ItemTypeEnum.WEAPON, 'sword', 100, 10],
+	AXE: ['axe', ItemTypeEnum.WEAPON, 'axe', 50, 12],
+	SCIMITAR: ['scimitar', ItemTypeEnum.WEAPON, 'scimitar', 10, 17],
+	//health [name, ItemTypeEnum.DRINK, img, rarity, +hp]
+	HP100: ['hp100', ItemTypeEnum.DRINK, 'hp100', 20, 100],
 	
 };
 
 var summedRarity = 0;
-for(var key in ItemName) {
-	summedRarity += ItemName[key][2];
-	ItemName[key][2] = summedRarity;
+for(var key in ItemProperties) {
+	summedRarity += ItemProperties[key][3];
+	ItemProperties[key][3] = summedRarity;
 }
 
-
-var Item = function(name, x, y) {
-    this.id = returnNextId();
+function WeaponItem(id,name,itemType, img, x, y, dmg){
+    this.id = id;
     this.name = name;
-    this.itemType = name[1];
-    this.x = x;
-    this.y = y;
-};
-Item.prototype.getItemImage = function() {
-	//Item name should be same as image variable name.
-	return this.name[0];
-};
-
-function WeaponItem(itemName, x, y) {
-	Item.call(this, itemName, x, y);
-	this.damage = itemName[3];    
+    this.itemType = ItemTypeEnum.WEAPON;
+	this.x = x;
+	this.y = y;
+    this.img = img;
+	this.dmg = dmg;
 }
-inheritsFrom(WeaponItem, Item);
 
-var keys = Object.keys(ItemName);
+function DrinkItem(id,name,itemType, img, x, y, amount){
+    this.id = id;
+    this.name = name;
+    this.itemType = ItemTypeEnum.DRINK;
+	this.x = x;
+	this.y = y;
+    this.img = img;
+	this.amount = amount;
+}
+
+
+function createItem(itemProperties, x, y) {
+	if(itemProperties[1] === ItemTypeEnum.WEAPON) {
+		return new WeaponItem(returnNextId(), itemProperties[0], itemProperties[1], itemProperties[2], x, y, itemProperties[4]);
+	} else if(itemProperties[1] === ItemTypeEnum.DRINK) {
+		return new DrinkItem(returnNextId(), itemProperties[0], itemProperties[1], itemProperties[2], x, y, itemProperties[4]);
+	}
+	
+}
+
+var keys = Object.keys(ItemProperties);
 var k_len = keys.length;
 function spawnRandomItem(x, y) {
 	//Item name should be same as image variable name.
-    var itemName;
+    var itemProperties;
 	var itemToSpawn = Math.floor((Math.random() * summedRarity) + 1);
     
 	for(var i = 0; i < k_len; i++) {
-        itemName = ItemName[keys[i]];
-		if(itemToSpawn <= itemName[2]) {
+        itemProperties = ItemProperties[keys[i]];
+		if(itemToSpawn <= itemProperties[2]) {
 			break;
 		}
 	}
+	return createItem(itemProperties, x, y);
 	var returnItem;
-	if(itemName[1] == ItemTypeEnum.WEAPON) {//weapon constructor
-		returnItem = new WeaponItem(itemName, x, y);
-	} else if(itemName[1] == ItemTypeEnum.HEALTH) {//health constructor
-		
-	}
-	
-	return returnItem;
 }
-
-newItem = spawnRandomItem(5,8);
-console.log(newItem);
-console.log(newItem.getItemImage());
-newItem = spawnRandomItem(5,8);
-console.log(newItem);
-console.log(newItem.getItemImage());
-newItem = spawnRandomItem(5,8);
-console.log(newItem);
-console.log(newItem.getItemImage());
-newItem = spawnRandomItem(5,8);
-console.log(newItem);
-console.log(newItem.getItemImage());
-newItem = spawnRandomItem(5,8);
-console.log(newItem);
-console.log(newItem.getItemImage());
