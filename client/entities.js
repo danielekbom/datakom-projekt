@@ -106,9 +106,9 @@ Player = function(name,x,y,width,height,velocity){
             socket.emit('player_move', { 'name' : self.name , 'x' : self.x , 'y' : self.y, 'direction' : self.direction, 'animationCounter'                 : self.animationCounter, 'animationCounterWeapon' : self.animationCounterWeapon});
         }
         
-        var weaponImage = Img[self.inventory[self.activeWeapon].getItemImage()]; //maybe change this later to returnImg()
+        var weaponImage = Img[self.inventory[self.activeWeapon].img];
         
-        //Draw the weapon in the correct direction and with the correct sprite using the animationCounterWeapon
+        //Draw the sword in the correct direction and with the correct sprite using the animationCounterWeapon
         if(self.direction == 1){
             ctx.drawImage(weaponImage,32*Math.floor(self.animationCounterWeapon),0,32,32,ctx.canvas.width/2+tileSize-10,ctx.canvas.height/2+5,tileSize,tileSize);
         }else if(self.direction == 3){
