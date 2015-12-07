@@ -73,19 +73,3 @@ function spawnRandomItem(x, y) {
 	
 	return returnItem;
 }
-
-newItem = spawnRandomItem(5,8);
-console.log(newItem);
-console.log(newItem.getItemImage());
-newItem = spawnRandomItem(5,8);
-console.log(newItem);
-console.log(newItem.getItemImage());
-newItem = spawnRandomItem(5,8);
-console.log(newItem);
-console.log(newItem.getItemImage());
-newItem = spawnRandomItem(5,8);
-console.log(newItem);
-console.log(newItem.getItemImage());
-newItem = spawnRandomItem(5,8);
-console.log(newItem);
-console.log(newItem.getItemImage());

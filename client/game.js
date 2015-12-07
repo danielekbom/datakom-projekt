@@ -48,7 +48,7 @@ Img.axe = new Image();
 Img.axe.src = "client/images/axe.png";
 
 Item.prototype.returnImg = function() {
-	return Img.(this.getItemImage());
+	return Img[this.getItemImage()];
 }
 
 /**
@@ -246,18 +246,18 @@ function drawPlayers(){
             currentSprite = Math.floor(players[key].animationCounter) % 3;
             
             if(players[key].direction == 1){
-                ctx.drawImage(Img.swords,32*Math.floor(players[key].animationCounterWeapon),0,32,32,canvasWidth/2+xDelta+tileSize-10,canvasHeight/2+yDelta+5,tileSize,tileSize);
+                ctx.drawImage(Img.sword,32*Math.floor(players[key].animationCounterWeapon),0,32,32,canvasWidth/2+xDelta+tileSize-10,canvasHeight/2+yDelta+5,tileSize,tileSize);
             }else if(players[key].direction == 3){
-                ctx.drawImage(Img.swords,32*Math.floor(players[key].animationCounterWeapon),32,32,32,canvasWidth/2+xDelta-tileSize+25,canvasHeight/2+yDelta+8,tileSize,tileSize);
+                ctx.drawImage(Img.sword,32*Math.floor(players[key].animationCounterWeapon),32,32,32,canvasWidth/2+xDelta-tileSize+25,canvasHeight/2+yDelta+8,tileSize,tileSize);
             }else if(players[key].direction == 0){
-                ctx.drawImage(Img.swords,32*Math.floor(players[key].animationCounterWeapon),64,32,32,canvasWidth/2+xDelta+tileSize-12,canvasHeight/2+yDelta+4,tileSize,tileSize);
+                ctx.drawImage(Img.sword,32*Math.floor(players[key].animationCounterWeapon),64,32,32,canvasWidth/2+xDelta+tileSize-12,canvasHeight/2+yDelta+4,tileSize,tileSize);
             }
             
             ctx.fillText(players[key].name,canvasWidth/2+xDelta+22, canvasHeight/2+yDelta-8);
             ctx.drawImage(Img.player,48*currentSprite,52*players[key].direction,52,52,canvasWidth/2+xDelta,canvasHeight/2+yDelta,50,50);
             
             if(players[key].direction == 2){
-                ctx.drawImage(Img.swords,32*Math.floor(players[key].animationCounterWeapon),64,32,32,canvasWidth/2+xDelta-tileSize+28,canvasHeight/2+yDelta+10,tileSize,tileSize);
+                ctx.drawImage(Img.sword,32*Math.floor(players[key].animationCounterWeapon),64,32,32,canvasWidth/2+xDelta-tileSize+28,canvasHeight/2+yDelta+10,tileSize,tileSize);
             }
         }
     }
@@ -268,7 +268,7 @@ function drawItems(){
         var xDelta = items[key].x - player.x;
         var yDelta = items[key].y - player.y;
         
-        var itemImage = Img[items[key].img];
+        var itemImage = items[key].returnImg();
         
         if(Math.abs(xDelta) < tileSize * 16 && Math.abs(yDelta) < tileSize * 11){
             ctx.drawImage(itemImage,0,0,32,32,canvasWidth/2+xDelta,canvasHeight/2+yDelta,32,32);
@@ -322,7 +322,8 @@ function updateInventory(){
         }else{
             $("#inventory-div").append("<div id='inventory-item-"+i+"' style='width:32px; height:32px; background-repeat: no-repeat; float:left;'></div>");
         }
-        $("#inventory-item-"+i).css("background-image", "url("+Img[player.inventory[i].img].src+")");   
+		console.log(player.inventory[i]);
+        $("#inventory-item-"+i).css("background-image", "url("+Img[player.inventory[i].returnImg()].src+")");   
     } 
 }
 
@@ -422,7 +423,7 @@ socket.on('name_already_in_use', function(){
     $("#name-already-in-use-text").show();
 });
 
-var ItemTypeEnum = {
+/*var ItemTypeEnum = {
   WEAPON: 1,
   HELTH: 2
 };
@@ -439,4 +440,4 @@ Item = function(id,name,x,y,img){
     };
     return self;
 }
-    
+*/    
