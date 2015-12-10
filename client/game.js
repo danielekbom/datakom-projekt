@@ -181,6 +181,7 @@ document.onkeydown = function(event){
         case 32:
             event.preventDefault();
             player.SpaceButton();
+            attack();
             break;
         case 81:
             event.preventDefault();
@@ -245,7 +246,7 @@ function drawPlayers(){
             currentSprite = Math.floor(players[key].animationCounter) % 3;
             
             if(players[key].direction == 1){
-                ctx.drawImage(Img.swords,32*Math.floor(players[key].animationCounterWeapon),0,32,32,canvasWidth/2+xDelta+tileSize-10,canvasHeight/2+yDelta+5,tileSize,tileSize);
+                ctx.drawImage(Img.sword,32*Math.floor(players[key].animationCounterWeapon),0,32,32,canvasWidth/2+xDelta+tileSize-10,canvasHeight/2+yDelta+5,tileSize,tileSize);
             }else if(players[key].direction == 3){
                 ctx.drawImage(Img.sword,32*Math.floor(players[key].animationCounterWeapon),32,32,32,canvasWidth/2+xDelta-tileSize+25,canvasHeight/2+yDelta+8,tileSize,tileSize);
             }else if(players[key].direction == 0){
@@ -274,6 +275,41 @@ function drawItems(){
         }
     }
 }
+
+function attack(){
+    for(var key in players){
+        if(player.direction == 0){
+            if(player.x + 26 > players[key].x + 10 && player.x + 26 < players[key].x + 42 && player.y > players[key].y + 10 && player.y < players[key].y + 40){
+                socket.emit('player_attacked', { 'attacker' : player.name , 'attacked' : players[key].name , 'damage' : player.inventory[player.activeWeapon].dmg});
+            }
+        }else if(player.direction == 1){
+            if(player.x + 52 > players[key].x + 10 && player.x + 52 < players[key].x + 30 && player.y + 26 > players[key].y && player.y + 26 < players[key].y + 52){
+                socket.emit('player_attacked', { 'attacker' : player.name , 'attacked' : players[key].name , 'damage' : player.inventory[player.activeWeapon].dmg});
+            }
+        }else if(player.direction == 2){
+            if(player.x + 26 > players[key].x + 10 && player.x + 26 < players[key].x + 42 && player.y + 52 > players[key].y + 15 && player.y + 52 < players[key].y + 52){
+                socket.emit('player_attacked', { 'attacker' : player.name , 'attacked' : players[key].name , 'damage' : player.inventory[player.activeWeapon].dmg});
+            }
+        }else if(player.direction == 3){
+            if(player.x > players[key].x + 10 && player.x < players[key].x + 40 && player.y + 26 > players[key].y && player.y + 26 < players[key].y + 52){
+                socket.emit('player_attacked', { 'attacker' : player.name , 'attacked' : players[key].name , 'damage' : player.inventory[player.activeWeapon].dmg});
+            }
+        }
+    }
+}
+
+socket.on('player_attacked', function(data){
+   if(data.attacked == player.name){
+       player.healthPoints -= data.damage;
+       if(player.healthPoints <= 0){
+           player.x = 1394;
+           player.y = 928;
+           player.healthPoints = 100;
+           socket.emit('player_move', { 'name' : player.name , 'x' : 1394 , 'y' : 928, 'direction' : 2, 'animationCounter' : player.animationCounter, 'animationCounterWeapon' : player.animationCounterWeapon});
+       }
+       $("#hp-div").html("<div style='width:100%; background-color:#333333; border:2px solid black; border-top:0px; border-left:0px; height:100%;'><div style='width: " + player.healthPoints + "%; background-color:#C00000; height:100%;'></div></div>");
+   } 
+});
 
 /**
  * Sends to node that this player whas moved.
@@ -306,6 +342,9 @@ socket.on('init_game', function (mapFromServer, playerList, itemList, tempPlayer
     $("#game-canvas").css({"height": canvasHeight, "width": canvasWidth, "visibility": "visible"});
     $("#map-canvas").css({"height": 138, "width": 138, "visibility": "visible"});
     $("#inventory-div").css({"height": 68, "width": 128, "visibility": "visible"});
+    $("#hp-div").css({"height": 20, "width": 136, "visibility": "visible"});
+    $("#hp-div").html("<div style='width:100%; background-color:#333333; border:2px solid black; border-top:0px; border-left:0px; height:100%;'><div style='width: " + player.healthPoints + "%; background-color:#C00000; height:100%;'></div></div>");
+    
     
     updateInventory();
     initMiniMap();

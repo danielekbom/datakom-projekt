@@ -167,8 +167,11 @@ ioServer.sockets.on('connection', function(socket){
         // TODO
     });
 
-    socket.on('player_attack', function(data) {
-        // TODO
+    socket.on('player_attacked', function(data) {
+        console.log(data.attacked);
+        console.log(data.damage);
+        var damage = Math.floor(Math.random() * data.damage) + 1 ;
+        socket.broadcast.emit('player_attacked', {'attacked' : data.attacked, 'damage' : damage});
     });
     
 	//setInterval(function(){

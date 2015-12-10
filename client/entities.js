@@ -32,6 +32,8 @@ Player = function(name,x,y,width,height,velocity){
     //the active item of the player
     self.activeWeapon = null;
     
+    self.healthPoints = 100;
+    
     //Update loop that updates all game logic, is called from mainLoop.
     //delta is a timestamp used to make all clients synced.
     self.update = function(delta){
@@ -146,7 +148,7 @@ Player = function(name,x,y,width,height,velocity){
         self.attacking = true;
         self.animationCounterWeapon += 0.3;
         //Send information to the server with the new animation data
-        socket.emit('player_move', { 'name' : self.name , 'x' : self.x , 'y' : self.y, 'direction' : self.direction, 'animationCounter' :               self.animationCounter, 'animationCounterWeapon' : self.animationCounterWeapon});
+        socket.emit('player_move', { 'name' : self.name , 'x' : self.x , 'y' : self.y, 'direction' : self.direction, 'animationCounter' : self.animationCounter, 'animationCounterWeapon' : self.animationCounterWeapon});
     };
     
     self.switchWeapon = function(){
