@@ -356,7 +356,7 @@ socket.on('init_game', function (mapFromServer, playerList, itemList, tempPlayer
     $("#game-canvas").css({"height": canvasHeight, "width": canvasWidth, "visibility": "visible"});
     $("#map-canvas").css({"height": 138, "width": 138, "visibility": "visible"});
     $("#inventory-div").css({"height": 68, "width": 128, "visibility": "visible"});
-    $("#hp-div").css({"height": 20, "width": 136, "visibility": "visible"});
+    $("#hp-div").css({"height": 20, "width": 138, "visibility": "visible"});
     $("#hp-div").html("<div style='width:100%; background-color:#333333; border:2px solid black; border-top:0px; border-left:0px; height:100%;'><div style='width: " + player.healthPoints + "%; background-color:#C00000; height:100%;'></div></div>");
     
     
