@@ -62,6 +62,7 @@ ioServer.sockets.on('connection', function(socket){
           if(foundPlayer) {
                 //Add the player found in the database to the game
                 players[foundPlayer.name] = new Player(socket.id, foundPlayer.name, foundPlayer.x, foundPlayer.y);
+                players[foundPlayer.name].healthPoints = foundPlayer.healthPoints;
                 players[foundPlayer.name].inventory.push(createItem(ItemProperties.SWORD, 0, 0));
               
                 console.log('User: ' + foundPlayer.name + ' - Connected');
@@ -70,7 +71,7 @@ ioServer.sockets.on('connection', function(socket){
                 socket.emit('init_game', map, players, items, players[foundPlayer.name]);
               
                 //Tell all players about the connected player
-                socket.broadcast.emit('player_connect', {'name' : foundPlayer.name, 'x' : foundPlayer.x, 'y' : foundPlayer.y}); // Tell other clients of new player.
+                socket.broadcast.emit('player_connect', {'name' : foundPlayer.name, 'x' : foundPlayer.x, 'y' : foundPlayer.y, 'healthPoints' : foundPlayer.healthPoints}); // Tell other clients of new player.
                 return;
             }
             //If player not found tell the user
@@ -119,7 +120,7 @@ ioServer.sockets.on('connection', function(socket){
             if(players[key].id  == socket.id){
                 
                 //Update player position in the database
-                dbPlayers.findOneAndUpdate({ name: key }, { x: players[key].x, y: players[key].y }, function(err, user) {
+                dbPlayers.findOneAndUpdate({ name: key }, { x: players[key].x, y: players[key].y, healthPoints: players[key].healthPoints }, function(err, user) {
                     if (err) throw err;
                     console.log("User: " + user.name + " - Positions saved in database");
                 });
@@ -168,10 +169,10 @@ ioServer.sockets.on('connection', function(socket){
     });
 
     socket.on('player_attacked', function(data) {
-        console.log(data.attacked);
-        console.log(data.damage);
         var damage = Math.floor(Math.random() * data.damage) + 1 ;
-        socket.broadcast.emit('player_attacked', {'attacked' : data.attacked, 'damage' : damage});
+        players[data.attacked].healthPoints -= damage;
+        if(players[data.attacked].healthPoints <= 0) players[data.attacked].healthPoints = 100;
+        ioServer.sockets.emit('player_attacked', {'attacked' : data.attacked, 'damage' : damage});
     });
     
 	//setInterval(function(){

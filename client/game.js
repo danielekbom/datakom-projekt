@@ -253,7 +253,13 @@ function drawPlayers(){
                 ctx.drawImage(Img.sword,32*Math.floor(players[key].animationCounterWeapon),64,32,32,canvasWidth/2+xDelta+tileSize-12,canvasHeight/2+yDelta+4,tileSize,tileSize);
             }
             
-            ctx.fillText(players[key].name,canvasWidth/2+xDelta+22, canvasHeight/2+yDelta-8);
+            ctx.fillText(players[key].name,canvasWidth/2+xDelta+22, canvasHeight/2+yDelta-16);
+            
+            ctx.fillRect(canvasWidth/2+xDelta-2,canvasHeight/2+yDelta-12,52,6);
+            ctx.fillStyle="#C00000";
+            ctx.fillRect(canvasWidth/2+xDelta-1,canvasHeight/2+yDelta-11,players[key].healthPoints/2,4);
+            ctx.fillStyle="#000000";
+            
             ctx.drawImage(Img.player,48*currentSprite,52*players[key].direction,52,52,canvasWidth/2+xDelta,canvasHeight/2+yDelta,50,50);
             
             if(players[key].direction == 2){
@@ -308,7 +314,14 @@ socket.on('player_attacked', function(data){
            socket.emit('player_move', { 'name' : player.name , 'x' : 1394 , 'y' : 928, 'direction' : 2, 'animationCounter' : player.animationCounter, 'animationCounterWeapon' : player.animationCounterWeapon});
        }
        $("#hp-div").html("<div style='width:100%; background-color:#333333; border:2px solid black; border-top:0px; border-left:0px; height:100%;'><div style='width: " + player.healthPoints + "%; background-color:#C00000; height:100%;'></div></div>");
-   } 
+   }else{
+       for(var key in players){
+            if(players[key].name == data.attacked){
+                players[key].healthPoints -= data.damage;
+                if(players[key].healthPoints <= 0) players[key].healthPoints = 100;
+            }   
+       }
+   }
 });
 
 /**
@@ -326,6 +339,7 @@ function emitMoved(){
 socket.on('init_game', function (mapFromServer, playerList, itemList, tempPlayer){
     //map = mapFromServer;
     player = new Player(tempPlayer.name, tempPlayer.x, tempPlayer.y, 50, 50, 0.1);
+    player.healthPoints = tempPlayer.healthPoints;
     
     for (var key in playerList) {
         if(playerList[key].name == player.name){ continue; }
@@ -401,6 +415,7 @@ function initMiniMap(){
  */
 socket.on('player_connect', function (data){
     players[data.name] = new Player(data.name,data.x,data.y,50,50,0.1);
+    players[data.name].healthPoints = data.healthPoints;
 });
 
 /**

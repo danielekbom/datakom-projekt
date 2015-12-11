@@ -120,7 +120,13 @@ Player = function(name,x,y,width,height,velocity){
         }
         
         //Draw the players name above the player
-        ctx.fillText(self.name,ctx.canvas.width/2+22, ctx.canvas.height/2-8);
+        ctx.fillText(self.name,ctx.canvas.width/2+22, ctx.canvas.height/2-16);
+        
+        ctx.fillRect(ctx.canvas.width/2-2,ctx.canvas.height/2-12,52,6);
+        ctx.fillStyle="#C00000";
+        ctx.fillRect(ctx.canvas.width/2-1,ctx.canvas.height/2-11,self.healthPoints/2,4);
+        ctx.fillStyle="#000000";
+        
         //Draw the player using the current sprite and direction
         ctx.drawImage(Img.player,48*currentSprite,52*self.direction,52,52,ctx.canvas.width/2,ctx.canvas.height/2,self.width,self.height);
         
