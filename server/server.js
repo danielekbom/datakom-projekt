@@ -175,15 +175,6 @@ ioServer.sockets.on('connection', function(socket){
         ioServer.sockets.emit('player_attacked', {'attacked' : data.attacked, 'damage' : damage});
     });
     
-    socket.on('item_try_pickup', function(data) {
-        for(key in items){
-            if(items[key].id == data.item_id){
-                ioServer.sockets.emit('picked_up', {'item_id' : data.item_id, 'player_name' : data.player_name});
-                delete items[key];
-            }
-        }
-    });
-    
 	//setInterval(function(){
 	//	socket.broadcast.emit('players_positions', players);
 	//}, 60);

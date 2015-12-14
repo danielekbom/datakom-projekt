@@ -66,10 +66,9 @@ Player = function(name,x,y,width,height,velocity){
         
         for(key in items){
             if(Math.abs(items[key].x - self.x) < 32 && Math.abs(items[key].y - self.y) < 32){
-                //self.inventory.push(items[key]);
-                //delete items[key];
-                //updateInventory();
-                socket.emit('item_try_pickup', { 'item_id' : items[key].id, 'player_name' : self.name });
+                self.inventory.push(items[key]);
+                delete items[key];
+                updateInventory();
             }
         }
         
@@ -87,7 +86,7 @@ Player = function(name,x,y,width,height,velocity){
                 self.attacking = false;
             }
             //Send information to the server about the new animation status
-            socket.emit('player_move', { 'name' : self.name , 'x' : self.x , 'y' : self.y, 'direction' : self.direction, 'animationCounter' : self.animationCounter, 'animationCounterWeapon' : self.animationCounterWeapon});
+            socket.emit('player_move', { 'name' : self.name , 'x' : self.x , 'y' : self.y, 'direction' : self.direction, 'animationCounter'                 : self.animationCounter, 'animationCounterWeapon' : self.animationCounterWeapon});
         }
     };
     
