@@ -17,7 +17,7 @@ var socket = null;
 var mapLayer1 = null;
 var mapLayer2 = null;
 
-socket = io.connect('http://127.0.0.1:9000/');
+socket = io.connect('http://130.238.251.25:9000/');
 
 var players = {};
 var items = {};
@@ -346,7 +346,9 @@ socket.on('init_game', function (mapFromServer, playerList, itemList, tempPlayer
         players[key] = playerList[key];
     }
     for (var key in itemList) {
-        items[key] = itemList[key];
+		if(itemList[key] != null) {
+			items[key] = itemList[key];
+		}
     }
     
     player.inventory = tempPlayer.inventory;
