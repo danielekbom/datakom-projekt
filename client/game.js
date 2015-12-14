@@ -440,6 +440,18 @@ socket.on('players_positions', function (data){
     }
 });
 
+socket.on('picked_up', function (data){
+    for(key in items){
+        if(items[key].id == data.item_id){
+            if(data.player_name == player.name){
+                player.inventory.push(items[key]);
+                updateInventory();
+            }
+            delete items[key];
+        }
+    }
+});
+
 function login(){
     var name = $("#username-login-input").val();
     var password = $("#password-login-input").val();
