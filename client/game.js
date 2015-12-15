@@ -17,7 +17,7 @@ var socket = null;
 var mapLayer1 = null;
 var mapLayer2 = null;
 
-socket = io.connect('http://130.238.251.25:9000/');
+socket = io.connect('http://localhost:9000/');
 
 var players = {};
 var items = {};
